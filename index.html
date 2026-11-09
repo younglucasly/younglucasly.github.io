@@ -1,0 +1,927 @@
+<!doctype html>
+<html lang="zh-CN" data-lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>刘飏</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23fff'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' text-anchor='middle' fill='%23202122'%3EL%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --text:#202122; --link:#0645ad; --gray:#54595d; --border:#a2a9b1; --light:#c8ccd1;
+  --box:#f8f9fa; --tab:#a7d7f9; --page:#f6f6f6; --todo:#b35a00;
+  --serif:"Linux Libertine","Georgia","Times","Songti SC","STSong","SimSun",serif;
+  --sans:-apple-system,"Helvetica Neue",Arial,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --mono:"Courier New",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--page);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.7}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+html[data-lang=zh] .en, html[data-lang=en] .zh{display:none!important}
+.todo{color:var(--todo);font-style:italic}
+
+#sidebar{position:absolute;top:0;left:0;width:176px;padding:34px 0 24px 24px}
+#head{margin-left:176px;height:84px;position:relative}
+#content{margin-left:176px;background:#fff;border:1px solid var(--tab);border-right:0;padding:20px 32px 36px;min-height:70vh}
+#footer{margin-left:176px;padding:16px 32px 40px;font-size:12px;color:var(--gray)}
+
+.nameblock{margin-bottom:34px}
+.nameblock .cn{font-family:var(--serif);font-size:30px;font-weight:700;letter-spacing:.04em;line-height:1.1}
+.nameblock .py{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.32em;margin-top:6px}
+#nav a{display:block;font-family:var(--serif);font-size:17px;text-decoration:underline;text-underline-offset:3px;margin:0 0 9px}
+#nav a.current{color:var(--text);text-decoration:none;font-weight:700}
+.langtoggle{margin-top:30px;font-size:13px;display:flex;align-items:center;gap:7px}
+.langtoggle button{font:inherit;border:0;background:none;padding:1px 5px;cursor:pointer;color:var(--link);text-decoration:underline}
+.langtoggle button[aria-pressed=true]{background:#1b2a6b;color:#fff;text-decoration:none;cursor:default}
+.langtoggle .en-btn{font-family:var(--mono);font-weight:700}
+
+/* tabs: every tab is a real link; the one for the current view is marked */
+.tabs{position:absolute;bottom:-1px;left:0;right:0;display:flex;align-items:flex-end;padding-right:12px}
+.tabs .group{display:flex}
+.tabs a{display:block;padding:6px 14px 5px;font-size:13px;border:1px solid var(--tab);border-bottom:0;margin-right:-1px;background:linear-gradient(#fff 0,#eef4fb 100%);line-height:1.3}
+.tabs a.sel{background:#fff;color:var(--text);position:relative;top:1px;padding-bottom:6px}
+.tabs .spacer{flex:1}
+.langbtn{position:absolute;right:12px;top:10px;font-size:13px;font-weight:700;border:1px solid var(--border);background:var(--box);border-radius:2px;padding:3px 10px;cursor:pointer;color:var(--link);font-family:var(--sans)}
+.langbtn b{color:var(--gray);margin-right:6px}
+
+.page{display:none}
+.page.active{display:block}
+h1{font-family:var(--serif);font-weight:400;font-size:29px;line-height:1.3;margin:0 0 2px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+.sitesub{font-size:12.5px;color:var(--gray);margin:6px 0 14px}
+h2{font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.3;margin:26px 0 8px;padding-bottom:3px;border-bottom:1px solid var(--border)}
+h3{font-size:16px;font-weight:700;margin:18px 0 4px}
+p{margin:6px 0 12px}
+ul,ol{margin:4px 0 12px 22px;padding:0}
+li{margin:4px 0}
+.notice{border:1px solid var(--border);border-left:8px solid #f28500;background:var(--box);padding:10px 14px;margin:8px 0 16px;font-size:14px}
+
+.infobox{float:right;clear:right;width:300px;margin:0 0 16px 22px;border:1px solid var(--border);background:var(--box);padding:4px;font-size:13px;line-height:1.45}
+.infobox .ib-title{text-align:center;font-weight:700;font-size:15px;padding:6px 4px}
+.infobox img{display:block;width:100%;height:auto;cursor:zoom-in}
+.infobox .ib-cap{text-align:center;font-size:12px;color:var(--gray);padding:4px 6px 8px}
+.infobox table{width:100%;border-collapse:collapse}
+.infobox th{text-align:left;vertical-align:top;padding:5px 6px;width:34%;border-top:1px solid #eaecf0}
+.infobox td{vertical-align:top;padding:5px 6px;border-top:1px solid #eaecf0}
+
+.toc{display:inline-block;border:1px solid var(--border);background:var(--box);padding:8px 14px 10px;font-size:13.5px;margin:6px 0 10px}
+.toc .toc-title{text-align:center;font-weight:700;margin-bottom:4px}
+.toc ol{list-style:none;margin:0;padding:0}
+.toc li{margin:2px 0}
+.toc .n{color:var(--text);margin-right:6px}
+
+.wikitable{border-collapse:collapse;background:var(--box);border:1px solid var(--border);margin:8px 0 14px;font-size:14px;line-height:1.55}
+.wikitable th,.wikitable td{border:1px solid var(--border);padding:6px 9px;vertical-align:top;text-align:left}
+.wikitable th{background:#eaecf0}
+
+/* experience list: date column + text */
+.cv{display:grid;grid-template-columns:150px 1fr;gap:2px 16px;margin:6px 0 14px}
+.cv dt{font-weight:700;font-size:14px;padding-top:1px}
+.cv dd{margin:0 0 12px}
+.cv dd .org{font-weight:700}
+
+.gallery{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 16px}
+.gallery figure{margin:0;width:226px;border:1px solid var(--light);background:var(--box);padding:6px}
+.gallery img{display:block;width:100%;height:auto;cursor:zoom-in}
+.gallery.wide figure{width:300px}
+.gallery figcaption{font-size:12.5px;line-height:1.45;padding:5px 2px 2px}
+
+.flow{border:1px solid var(--light);background:var(--box);padding:14px 14px 10px;margin:8px 0 16px;max-width:560px}
+.fl-row{display:flex;gap:12px;justify-content:center}
+.fl-node{flex:0 1 300px;background:#fff;border:1px solid var(--border);padding:8px 10px;text-align:center;font-size:14px;font-weight:700;line-height:1.4}
+.fl-row.two .fl-node{flex:1 1 0}
+.fl-node small{display:block;font-weight:400;font-size:12.5px;color:var(--gray);margin-top:3px}
+.fl-arrow{text-align:center;color:var(--gray);font-size:17px;line-height:1;padding:6px 0}
+.fl-arrow span{font-size:12px;margin-left:4px}
+.flow figcaption{font-size:12.5px;line-height:1.45;margin-top:10px;border-top:1px solid #eaecf0;padding-top:6px}
+.player{max-width:640px;margin:8px 0 6px;background:#000}
+.player video{display:block;width:100%;height:auto;background:#000}
+.player.r43{max-width:520px}
+.vnote{font-size:12.5px;margin:0 0 12px}
+pre{font-family:var(--mono);font-size:13px;line-height:1.5;background:var(--box);border:1px solid #eaecf0;padding:12px 14px;white-space:pre-wrap;margin:8px 0 14px}
+.clear{clear:both}
+
+/* works main page */
+.mp-welcome{display:flex;gap:20px;justify-content:space-between;align-items:center;border:1px solid #ddd;background:var(--box);padding:14px 20px;margin-bottom:14px;flex-wrap:wrap}
+.mp-welcome .w1{font-family:var(--serif);font-size:27px;line-height:1.25}
+.mp-welcome .w2{font-size:13.5px;margin-top:4px}
+.mp-portals{display:grid;grid-template-columns:repeat(2,auto);gap:2px 26px;font-size:13.5px;font-weight:700}
+.mp-portals a::before{content:"• ";color:var(--text)}
+.mp-cols{display:grid;grid-template-columns:57% 1fr;gap:14px}
+.mp-box{border:1px solid;padding:6px 10px 10px}
+.mp-box.green{background:#f5fffa;border-color:#cef2e0}
+.mp-box.blue{background:#f5faff;border-color:#cedff2}
+.mp-h{font-family:var(--serif);font-weight:700;font-size:16px;padding:3px 8px;margin:4px -2px 10px;border:1px solid}
+.green .mp-h{background:#cef2e0;border-color:#a3bfb1}
+.blue .mp-h{background:#cedff2;border-color:#a3b0bf}
+.feat{overflow:hidden;font-size:14px}
+.feat img{float:left;width:230px;margin:4px 14px 6px 0;border:1px solid var(--light)}
+.filmrow{display:grid;grid-template-columns:120px 1fr;gap:12px;align-items:center;font-size:14px;margin-bottom:10px;line-height:1.5}
+.filmrow img{width:120px;aspect-ratio:16/10;object-fit:cover;display:block;border:1px solid var(--light)}
+.mp-box ul{margin-left:16px;font-size:14px}
+
+#lightbox{position:fixed;inset:0;background:rgba(0,0,0,.86);display:none;align-items:center;justify-content:center;flex-direction:column;z-index:10;cursor:zoom-out;padding:20px}
+#lightbox.open{display:flex}
+#lightbox img{max-width:94vw;max-height:84vh}
+#lightbox div{color:#ddd;font-size:14px;margin-top:10px;max-width:900px;text-align:center}
+
+@media (max-width:820px){
+  #sidebar{position:static;width:auto;padding:18px 16px 4px;display:flex;flex-wrap:wrap;align-items:flex-end;gap:6px 18px}
+  .nameblock{margin:0 18px 6px 0}
+  #nav{display:flex;flex-wrap:wrap;gap:2px 14px}
+  #nav a{margin:0;font-size:15px}
+  .langtoggle{margin:0 0 6px}
+  #head,#content,#footer{margin-left:0}
+  #head{height:auto;padding:6px 0 0}
+  .tabs{position:static}
+  .langbtn{display:none}
+  #head{padding-top:4px}
+  #content{padding:14px 16px 28px;border-left:0}
+  .infobox{float:none;width:auto;margin:0 0 14px}
+  .infobox img{max-height:380px;object-fit:cover}
+  .mp-cols{grid-template-columns:1fr}
+  .feat img{float:none;width:100%;margin:0 0 8px}
+  .gallery figure,.gallery.wide figure{width:calc(50% - 5px)}
+  .wikitable{display:block;overflow-x:auto}
+  .cv{grid-template-columns:1fr}
+  .cv dd{margin-bottom:14px}
+  #about .infobox img{max-height:250px;object-position:50% 42%}
+}
+@media (max-width:560px){
+  .gallery.wide figure{width:100%}
+}
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <div class="nameblock"><div class="cn">刘飏</div><div class="py">LIU YANG</div></div>
+  <nav id="nav">
+    <a href="#about" data-nav="about"><span class="zh">关于</span><span class="en">About</span></a>
+    <a href="#works" data-nav="works"><span class="zh">作品</span><span class="en">Work</span></a>
+    <a href="#workflow" data-nav="workflow"><span class="zh">工作流</span><span class="en">Workflow</span></a>
+    <a href="#visuals" data-nav="visuals"><span class="zh">视觉</span><span class="en">Visuals</span></a>
+    <a href="#contact" data-nav="contact"><span class="zh">联系</span><span class="en">Contact</span></a>
+  </nav>
+  <div class="langtoggle">
+    <button type="button" data-setlang="zh" aria-pressed="true">中文</button>/<button type="button" class="en-btn" data-setlang="en" aria-pressed="false">EN</button>
+  </div>
+</div>
+
+<div id="head">
+  <button type="button" class="langbtn" id="langbtn"><b>文A</b><span class="zh">English</span><span class="en">中文</span></button>
+  <div class="tabs">
+    <div class="group">
+      <a href="#about" id="tab-page" class="sel"><span class="zh">页面</span><span class="en">Page</span></a>
+      <a href="#contact" id="tab-talk"><span class="zh">讨论</span><span class="en">Talk</span></a>
+    </div>
+    <div class="spacer"></div>
+    <div class="group">
+      <a href="#about" id="tab-read" class="sel"><span class="zh">阅读</span><span class="en">Read</span></a>
+    </div>
+  </div>
+</div>
+
+<main id="content">
+
+<!-- ================= ABOUT ================= -->
+<section class="page" id="about" data-title-zh="刘飏" data-title-en="Liu Yang">
+  <h1><span class="zh">刘飏</span><span class="en">Liu Yang</span></h1>
+  <div class="sitesub"><span class="zh">出自 刘飏的主页</span><span class="en">From Liu Yang’s homepage</span></div>
+  <aside class="infobox">
+    <div class="ib-title">刘飏<span class="en"> · Liu Yang</span></div>
+    <img src="assets/img/photo.jpg" alt="" data-cap-zh="刘飏摄于伦敦" data-cap-en="Liu Yang in London">
+    <div class="ib-cap"><span class="zh">刘飏摄于伦敦</span><span class="en">Liu Yang in London</span></div>
+    <table>
+      <tr><th><span class="zh">学校</span><span class="en">School</span></th><td><span class="zh">英国威斯敏斯特大学</span><span class="en">University of Westminster</span></td></tr>
+      <tr><th><span class="zh">学位</span><span class="en">Degrees</span></th><td><span class="zh">数字媒体学士（新闻）<br>数字媒体硕士（叙事与制作）</span><span class="en">BA Digital Media: Journalism<br>MA Digital Media: Storytelling &amp; Production</span></td></tr>
+      <tr><th><span class="zh">语言</span><span class="en">Languages</span></th><td><span class="zh">中文、英语</span><span class="en">Mandarin, English</span></td></tr>
+      <tr><th><span class="zh">技能</span><span class="en">Skills</span></th><td><span class="zh">内容与品牌、活动组织、数据分析、影像制作、AI 与工具</span><span class="en">Content and branding, event organisation, data analysis, photo and video production, AI and tools</span></td></tr>
+      <tr><th><span class="zh">邮箱</span><span class="en">Email</span></th><td><a href="mailto:liuyang20mc@163.com">liuyang20mc@163.com</a></td></tr>
+    </table>
+  </aside>
+  <p class="zh"><b>刘飏</b>（英语：Liu Yang）。毕业于英国威斯敏斯特大学，获数字媒体学士及硕士学位。</p>
+  <p class="zh">曾在人民网英国分公司担任实习记者，负责商业活动、文化交流、使馆类活动的摄影摄像、新闻短视频剪辑；同时参与部分活动的前期筹备与现场执行。2026 年 5 月任职于起重集文化传媒有限公司，从事 IP 海外社媒矩阵运营。</p>
+  <p class="en"><b>Liu Yang</b> (Chinese: 刘飏) graduated from the University of Westminster with a BA and an MA in Digital Media.</p>
+  <p class="en">Liu previously worked as an intern reporter at People’s Daily Online UK, photographing and filming business events, cultural exchanges and embassy events and editing short news videos, and also helped prepare and run some of the events. In May 2026 Liu joined Qizhongji Culture Media, running a network of overseas social media accounts for its IPs.</p>
+  <div data-toc></div>
+
+  <h2 id="about-education"><span class="zh">教育</span><span class="en">Education</span></h2>
+  <h3><span class="zh">英国威斯敏斯特大学 · 数字媒体硕士（叙事与制作）（2024–2025）</span><span class="en">University of Westminster · MA Digital Media: Storytelling &amp; Production (2024–2025)</span></h3>
+  <p><span class="zh">主修课程：</span><span class="en">Selected modules:</span></p>
+  <ul class="zh">
+    <li>数字营销与生成式 AI（Digital Marketing and Generative AI）</li>
+    <li>媒体叙事（Media Storytelling）</li>
+  </ul>
+  <ul class="en">
+    <li>Digital Marketing and Generative AI</li>
+    <li>Media Storytelling</li>
+  </ul>
+  <h3><span class="zh">英国威斯敏斯特大学 · 数字媒体学士（新闻）（2022–2024）</span><span class="en">University of Westminster · BA Digital Media: Journalism (2022–2024)</span></h3>
+  <p><span class="zh">主修课程：</span><span class="en">Selected modules:</span></p>
+  <ul class="zh">
+    <li>互联网文化（Internet Cultures）</li>
+    <li>数据与社会（Data and Society）</li>
+    <li>数字媒体行业实务（Working in Digital Media 1）</li>
+    <li>移动优先：视频与社交媒体内容（Mobile First: Video and Social Media Content）</li>
+    <li>消费文化与社会（Consumer Culture and Society）</li>
+    <li>创意广告（Creative Advertising）</li>
+  </ul>
+  <ul class="en">
+    <li>Internet Cultures</li>
+    <li>Data and Society</li>
+    <li>Working in Digital Media 1</li>
+    <li>Mobile First: Video and Social Media Content</li>
+    <li>Consumer Culture and Society</li>
+    <li>Creative Advertising</li>
+  </ul>
+
+  <h2 id="about-career"><span class="zh">工作经历</span><span class="en">Experience</span></h2>
+  <h3><span class="zh">起重集文化传媒有限公司 · 海外社交媒体运营（2026.05–2026.08）</span><span class="en">Qizhongji Culture Media · Overseas Social Media Operator (May–Aug 2026)</span></h3>
+  <ol class="zh">
+    <li><b>搭建海外 IP 内容体系</b>：从零建立 3 个账号、重新梳理 2 个老账号，按角色特点制定内容方向，统计期内连续 12 周每周产出至少 3 条千赞内容；为线条小狗沉淀出固定制作 SOP 后，71 条内容中 69 条获得千赞；针对暹罗厘普内容与受众错位的问题，调整为拟人化的日常共鸣梗，单月播放从约 0.79 万提升至 20.8 万。</li>
+    <li><b>用 AI 提升选题效率</b>：结合日常工作流程，自主总结并生成内容收集、竞品调研、热点追踪等 AI Skills，并搭建数据追踪工作台；通过热点追踪 Skill 发现一段处于上升期的音频，据此策划制作的 Reels 播放 221 万、分享 12.7 万。</li>
+    <li><b>数据驱动孵化新账号</b>：复盘数据时发现奶茶鼠系列内容在起重集官号表现突出，提出将该 IP 独立建号运营，负责账号定位、起号策略、内容排期和官号导流；新号上线 12 天播放约 19.2 万、分享约 1.19 万。</li>
+  </ol>
+  <ol class="en">
+    <li><b>Building overseas IP content</b>: Built 3 accounts from scratch and reworked 2 existing ones, setting a content direction for each character; during the tracked period, produced at least 3 posts with over 1,000 likes every week for 12 consecutive weeks. After establishing a fixed production SOP for Maltese, 69 of 71 posts passed 1,000 likes. For LiPU FRiENDS, whose content did not match its audience, shifted to anthropomorphic, relatable everyday humour, raising monthly views from about 7,900 to 208,000.</li>
+    <li><b>Using AI to speed up topic planning</b>: Drawing on the daily workflow, independently developed AI skills for content collection, competitor research and trend tracking, and built a data-tracking dashboard. The trend-tracking skill surfaced a rising audio clip; the Reel planned around it reached 2.21 million views and 127,000 shares.</li>
+    <li><b>Launching a new account from data</b>: A data review showed the BOBARAT series performing strongly on the Qizhongji main account; proposed spinning the IP off into its own account and handled positioning, launch strategy, scheduling and cross-promotion from the main account. The new account reached about 192,000 views and 11,900 shares in its first 12 days.</li>
+  </ol>
+  <h3><span class="zh">人民网英国分公司 · 实习记者（2023.04–2025.12）</span><span class="en">People’s Daily Online UK · Intern Reporter (Apr 2023 – Dec 2025)</span></h3>
+  <ol class="zh">
+    <li><b>新闻影像采编</b>：在中资企业商业活动、文化交流和使馆活动中担任现场摄影摄像，新闻短视频从拍摄到剪辑独立交付，多机位长片按分工负责机位与部分剪辑，成片用于新闻发布和机构存档。</li>
+    <li><b>活动筹备与现场执行</b>：人民网主办活动时参与筹备和现场执行，协助确认流程、布置场地、检查物料和签到接待，并用英文对接外国来宾、主办方、场地方及外部摄制团队。</li>
+  </ol>
+  <ol class="en">
+    <li><b>News photography and video</b>: Photographed and filmed on site at Chinese business events, cultural exchanges and embassy events; delivered news videos independently from filming to editing, and on multi-camera long-form pieces operated assigned cameras and edited parts. The finished work was used for news releases and institutional archives.</li>
+    <li><b>Event preparation and execution</b>: Helped prepare and run events hosted by People’s Daily Online: confirming the run of show, setting up venues, checking materials and handling check-in, and liaising in English with foreign guests, organisers, venues and outside film crews.</li>
+  </ol>
+  <h3><span class="zh">《得闲谨制》电影伦敦线下推广 · 门店拓展（2025.11）</span><span class="en"><i>Dexian Jinzhi</i> (film) London offline promotion · Venue outreach (Nov 2025)</span></h3>
+  <ol class="zh">
+    <li><b>推广目标</b>：在伦敦为电影落地线下宣传点位，联系影院和餐馆，确认海报布置并争取店内展示。</li>
+    <li><b>执行方法</b>：针对商户对占用空间和清洁负担的顾虑，设计零成本合作方案（免费布置、观影福利、线上标注门店）；按客群和老板是否常驻筛选门店，按商圈规划路线。联系约 27 家餐馆，15 家同意展示，转化率约 56%。</li>
+  </ol>
+  <ol class="en">
+    <li><b>Goal</b>: Secured offline promotion spots for the film in London, contacting cinemas and restaurants, confirming poster placement and seeking in-store display.</li>
+    <li><b>Approach</b>: Addressed businesses’ concerns about space and cleaning with a zero-cost partnership offer (free set-up, screening perks and online venue credits); shortlisted venues by clientele and whether the owner was usually on site, and planned routes by district. Contacted about 27 restaurants, 15 of which agreed, a conversion rate of about 56%.</li>
+  </ol>
+  <h3><span class="zh">《山海无界·乐传全球》中欧艺术交流音乐会 · 执行团队成员（2025.09）</span><span class="en">China–Europe arts exchange concert · Event team member (Sep 2025)</span></h3>
+  <ol class="zh">
+    <li><b>前期准备</b>：与同事协同为约 30 人的赴英演出团队安排接机和行程；参与梳理整场拍摄清单和拍摄节点，负责对接品牌方，确认官方拍摄规范、必拍镜头和采访提纲。</li>
+    <li><b>乐器租赁与物流</b>：按演出需求整理乐器清单，通过英文邮件完成本地供应商的询价和预订，确认租期、赔付和取还时间，并安排货车与卸货时间；发现配件缺失后拍照留证，紧急联系原租赁商和备用供应商调配。</li>
+    <li><b>现场执行与应变</b>：演出当天参与场地布置、排练时间协调和流程跟进，并负责现场摄影摄像；场地因消防要求否决原定机位、禁用三脚架，改用手持和稳定器优先保障必拍镜头，并提出演后补拍，满足品牌方临时增加的特写和采访需求。</li>
+  </ol>
+  <ol class="en">
+    <li><b>Preparation</b>: With colleagues, arranged airport pick-ups and itineraries for a touring company of about 30; helped draw up the shot list and filming schedule, and liaised with the brand to confirm official filming guidelines, must-have shots and interview outlines.</li>
+    <li><b>Instrument hire and logistics</b>: Compiled the instrument list for the performance, handled quotes and bookings with local suppliers by English email, confirmed hire periods, liability and collection and return times, and arranged vans and unloading slots; when parts were found missing, documented them with photos and urgently sourced replacements from the original and backup suppliers.</li>
+    <li><b>On-site execution</b>: On the day, helped set up the venue, coordinate rehearsal times and keep the programme on track, and handled photography and filming; when fire regulations ruled out the planned camera positions and tripods, switched to handheld and gimbal to secure the must-have shots, and proposed a post-show pick-up shoot to cover close-ups and interviews the brand added at short notice.</li>
+  </ol>
+  <h3><span class="zh">《Aliens Stole Your Culture》跨文化播客 · 主策划与制作人（2025.03）</span><span class="en"><i>Aliens Stole Your Culture</i> cross-cultural podcast · Lead planner and producer (Mar 2025)</span></h3>
+  <ol class="zh">
+    <li><b>嘉宾筛选与邀约</b>：按内容垂类、表达风格和英文录制意愿筛选，在小红书联系约 10 位外籍博主，根据对方经历定制私信，最终邀请到英国创作者 Brian Smith 和挪威创作者 Gabi。</li>
+    <li><b>录制与后期</b>：与嘉宾共创提纲，负责录音、控场与后期（降噪、双语字幕、shownotes），两个多小时素材剪成约 12 分钟成片。</li>
+  </ol>
+  <ol class="en">
+    <li><b>Guest selection and outreach</b>: Screened candidates by content niche, speaking style and willingness to record in English, contacted about 10 overseas creators on Xiaohongshu with messages tailored to each, and booked British creator Brian Smith and Norwegian creator Gabi.</li>
+    <li><b>Recording and post-production</b>: Developed the outline with the guests and handled recording, hosting and post-production (noise reduction, bilingual subtitles, show notes), cutting over two hours of material into an episode of about 12 minutes.</li>
+  </ol>
+  <h3><span class="zh">《未来·观》中英青年数字创意展 · 嘉宾联络与参会协调（2024.09）</span><span class="en">China–UK youth digital creativity exhibition · Guest liaison and attendance coordination (Sep 2024)</span></h3>
+  <ol class="zh">
+    <li><b>嘉宾邮件沟通</b>：展会为 2024 伦敦设计节官方伙伴活动，为期 4 天，每日嘉宾约 70 至 100 人；负责出席确认、观展须知、交通入场指引和电子邀请函等中英文邮件，日均处理约 30 至 60 封，开展前高峰期达 60 至 90 余封。</li>
+    <li><b>信息管理</b>：按观众、特邀嘉宾、创作者、媒体和赞助商分类维护台账，配合预约核验和票务安排。</li>
+  </ol>
+  <ol class="en">
+    <li><b>Guest email communication</b>: The exhibition was an official partner event of the 2024 London Design Festival, running for 4 days with about 70 to 100 guests a day. Handled Chinese and English emails covering attendance confirmations, visitor information, travel and entry directions and e-invitations, about 30 to 60 a day and 60 to 90-plus at the peak before opening.</li>
+    <li><b>Records management</b>: Maintained records split by visitors, invited guests, creators, media and sponsors, supporting booking checks and ticketing.</li>
+  </ol>
+
+  <h2 id="about-works"><span class="zh">AIGC 作品</span><span class="en">AIGC work</span></h2>
+  <ul class="zh">
+    <li><a href="#five-seconds">《小星电话手表广告》</a>：AI 广告，儿童电话手表，约 50 秒</li>
+    <li><a href="#naiwa">《如果真的有奶蛙》</a>：AI 娱乐短视频，伪纪录片</li>
+    <li><a href="#vampire-pumpkin">《吸血鬼与南瓜》</a>：AI 情景喜剧，约 1 分 10 秒</li>
+  </ul>
+  <ul class="en">
+    <li><a href="#five-seconds"><i>Xiaoxing Phone Watch Ad</i></a>: AI commercial for a children’s phone watch, about 50 seconds</li>
+    <li><a href="#naiwa"><i>If Naiwa Were Real</i></a>: AI entertainment short, mockumentary</li>
+    <li><a href="#vampire-pumpkin"><i>The Vampire and the Pumpkin</i></a>: AI sitcom, about 1 minute 10 seconds</li>
+  </ul>
+  <div class="clear"></div>
+</section>
+
+<!-- ================= WORKS main page ================= -->
+<section class="page" id="works" data-title-zh="作品" data-title-en="Work">
+  <div class="mp-welcome">
+    <div>
+      <div class="w1"><span class="zh">欢迎来到<a href="#about">刘飏</a>的作品主页</span><span class="en">Welcome to <a href="#about">Liu Yang</a>’s work</span></div>
+      <div class="w2"><span class="zh">本站收录刘飏的 3 部 AI 影像作品及其制作资料。</span><span class="en">Three AI films by Liu Yang, with production notes.</span></div>
+    </div>
+    <div class="mp-portals">
+      <a href="#five-seconds"><span class="zh">小星电话手表广告</span><span class="en">Xiaoxing Phone Watch Ad</span></a>
+      <a href="#visuals"><span class="zh">视觉</span><span class="en">Visuals</span></a>
+      <a href="#naiwa"><span class="zh">如果真的有奶蛙</span><span class="en">If Naiwa Were Real</span></a>
+      <a href="#about"><span class="zh">关于</span><span class="en">About</span></a>
+      <a href="#vampire-pumpkin"><span class="zh">吸血鬼与南瓜</span><span class="en">The Vampire and the Pumpkin</span></a>
+      <a href="#contact"><span class="zh">联系</span><span class="en">Contact</span></a>
+    </div>
+  </div>
+  <div class="mp-cols">
+    <div class="mp-box green">
+      <div class="mp-h"><span class="zh">特色作品</span><span class="en">Featured work</span></div>
+      <div class="feat">
+        <a href="#five-seconds"><img src="assets/img/cover1.jpg" data-fallback="assets/img/v1_1.jpg" alt=""></a>
+        <p class="zh"><b><a href="#five-seconds">《小星电话手表广告》</a></b>是一部 AI 生成的广告短片，为儿童电话手表「小星 i7 Pro」制作，片长约 50 秒。影片讲述小学生小宇偷偷进入电玩城，被母亲通过手表定位发现的经过，以喜剧形式展示手表“定位精确到楼层”的功能。片尾标语为“放手，也放心”。（<a href="#five-seconds">全文……</a>）</p>
+        <p class="en"><b><a href="#five-seconds"><i>Xiaoxing Phone Watch Ad</i></a></b> is an AI-generated commercial for the Xiaoxing i7 Pro children’s phone watch, about 50 seconds long. It follows a schoolboy, Xiaoyu, who sneaks into an arcade and is found by his mother through the watch’s location tracking, using comedy to show that the watch can locate a child down to the floor. Its closing line is “Let go, with peace of mind.” (<a href="#five-seconds">Full article…</a>)</p>
+      </div>
+      <div class="mp-h"><span class="zh">全部作品</span><span class="en">All works</span></div>
+      <a class="filmrow" href="#five-seconds"><img src="assets/img/cover1.jpg" data-fallback="assets/img/v1_3.jpg" alt=""><span><b><span class="zh">《小星电话手表广告》</span><span class="en"><i>Xiaoxing Phone Watch Ad</i></span></b><br><span class="zh" style="color:var(--text)">AI 广告 · 儿童电话手表 · 约 50 秒</span><span class="en" style="color:var(--text)">AI commercial · children’s phone watch · about 0:50</span></span></a>
+      <a class="filmrow" href="#naiwa"><img src="assets/img/cover2.jpg" data-fallback="assets/img/v3_3.jpg" alt=""><span><b><span class="zh">《如果真的有奶蛙》</span><span class="en"><i>If Naiwa Were Real</i></span></b><br><span class="zh" style="color:var(--text)">AI 娱乐短视频 · 伪纪录片 · 播放 22.9 万次</span><span class="en" style="color:var(--text)">AI entertainment short · mockumentary · 229,000 views</span></span></a>
+      <a class="filmrow" href="#vampire-pumpkin"><img src="assets/img/cover3.jpg" data-fallback="assets/img/v2_2.jpg" alt=""><span><b><span class="zh">《吸血鬼与南瓜》</span><span class="en"><i>The Vampire and the Pumpkin</i></span></b><br><span class="zh" style="color:var(--text)">AI 情景喜剧 · 英语对白 · 约 1 分 10 秒</span><span class="en" style="color:var(--text)">AI sitcom · English dialogue · about 1:10</span></span></a>
+    </div>
+    <div class="mp-box blue">
+      <div class="mp-h"><span class="zh">你知道吗？</span><span class="en">Did you know…</span></div>
+      <ul class="zh">
+        <li>……<a href="#naiwa">《如果真的有奶蛙》</a>的分享量（2.4 万次）高于点赞量（1.7 万次）？</li>
+        <li>……<a href="#five-seconds">《小星电话手表广告》</a>中母亲的台词经多轮删减，最终只保留了“给你五秒”四个字？</li>
+      </ul>
+      <ul class="en">
+        <li>… that <a href="#naiwa"><i>If Naiwa Were Real</i></a> was shared more times (24,000) than it was liked (17,000)?</li>
+        <li>… that the mother’s lines in <a href="#five-seconds"><i>Xiaoxing Phone Watch Ad</i></a> were cut over several rounds until only “Five seconds” remained?</li>
+      </ul>
+      <div class="mp-h"><span class="zh">制作方法</span><span class="en">Method</span></div>
+      <p class="zh" style="font-size:14px">以下是刘飏在 AIGC 视频制作中总结的提示词编写 SOP。每条视频提示词按此顺序逐项编写，三部作品均采用这一写法；各片的具体做法见各条目的「制作」章节。</p>
+      <p class="en" style="font-size:14px">This is the prompt-writing SOP Liu Yang has developed through AIGC video work. Every video prompt is written section by section in this order, and all three works use it; how each film applied it is described in the Production section of its article.</p>
+      <pre class="zh" style="font-size:12.5px">场景 → 格式 → 画面与机位 → 人物规则 → 最重要的两条规则 → 参考图用法 → 产品 → 面部 → 空间 → 动作（带时间码）→ 表演 → 摄影机 → 光学 → 光线 → 调色 → 不许静止 → 数量锁定 → 声音 → 禁止</pre>
+      <pre class="en" style="font-size:12.5px">Scene → Format → Frame and camera position → Character rules → The two rules that matter most → Use of references → Product → Face → Space → Action (timecoded) → Performance → Camera → Optics → Light → Grade → No freezing → Count lock → Sound → Forbidden</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FILM 1 ================= -->
+<section class="page" id="five-seconds" data-title-zh="小星电话手表广告" data-title-en="Xiaoxing Phone Watch Ad" data-parent="works">
+  <h1><span class="zh">小星电话手表广告</span><span class="en"><i>Xiaoxing Phone Watch Ad</i></span></h1>
+  <div class="sitesub"><span class="zh">出自 刘飏的主页</span><span class="en">From Liu Yang’s homepage</span></div>
+  <aside class="infobox">
+    <div class="ib-title"><span class="zh">小星电话手表广告</span><span class="en"><i>Xiaoxing Phone Watch Ad</i></span></div>
+    <img src="assets/img/cover1.jpg" data-fallback="assets/img/v1_3.jpg" alt="" data-cap-zh="影片片尾定版" data-cap-en="The closing product card">
+    <div class="ib-cap"><span class="zh">影片片尾定版</span><span class="en">The closing product card</span></div>
+    <table>
+      <tr><th><span class="zh">类型</span><span class="en">Genre</span></th><td><span class="zh">广告短片</span><span class="en">Commercial</span></td></tr>
+      <tr><th><span class="zh">产品</span><span class="en">Product</span></th><td><span class="zh">小星 i7 Pro 儿童电话手表</span><span class="en">Xiaoxing i7 Pro children’s phone watch</span></td></tr>
+      <tr><th><span class="zh">目标受众</span><span class="en">Audience</span></th><td><span class="zh">5 至 12 岁小学生家长</span><span class="en">Parents of children aged 5–12</span></td></tr>
+      <tr><th><span class="zh">片长</span><span class="en">Running time</span></th><td><span class="zh">约 50 秒</span><span class="en">About 50 seconds</span></td></tr>
+      <tr><th><span class="zh">语言</span><span class="en">Language</span></th><td><span class="zh">汉语</span><span class="en">Mandarin</span></td></tr>
+      <tr><th><span class="zh">制作方式</span><span class="en">Production</span></th><td><span class="zh">AI 生成</span><span class="en">AI-generated</span></td></tr>
+    </table>
+  </aside>
+  <p class="zh"><b>《小星电话手表广告》</b>是一部 AI 生成的广告短片，为儿童电话手表「小星 i7 Pro」制作，片长约 50 秒，目标受众为 5 至 12 岁小学生的家长。影片以喜剧形式展示手表“定位精确到楼层”的功能，片尾标语为“放手，也放心”。</p>
+  <p class="en"><b><i>Xiaoxing Phone Watch Ad</i></b> is an AI-generated commercial for the Xiaoxing i7 Pro children’s phone watch. It runs about 50 seconds and is aimed at parents of children aged 5 to 12. The film uses comedy to show that the watch can locate a child down to the floor, and closes on the line “Let go, with peace of mind.”</p>
+  <div data-toc></div>
+
+  <h2 id="five-seconds-plot"><span class="zh">剧情</span><span class="en">Plot</span></h2>
+  <p class="zh">小学生小宇与同学胖墩、朵朵偷偷前往商场内的电玩城。朵朵担心被发现，小宇回头张望后表示“怎么可能”。小宇的母亲在办公室收到手表推送的提醒，在地图上看到孩子已进入电玩城，随即拨通手表电话。小宇刚接通，母亲只说了一句“给你五秒”，背景音乐随即中断；小宇起身跑开，同学说：“他妈知道了。”</p>
+  <p class="zh">影片后半部分转入产品展示，依次呈现 GPS 楼层定位、刷手表进站、碰一碰添加好友、AI 助手“小星”答题和睡眠监测等功能，最后以白底产品定版和标语“放手，也放心”结束。</p>
+  <p class="en">Schoolboy Xiaoyu sneaks into an arcade in a shopping mall with his friends Pangdun and Duoduo. Duoduo worries they will be found out; Xiaoyu looks back and insists there is no way. At her office, his mother receives an alert from the watch, sees on the map that her son has entered the arcade, and calls his watch. As soon as he answers she says only “Five seconds,” and the music cuts out. Xiaoyu runs off, and a friend remarks, “His mum knows.”</p>
+  <p class="en">The second half turns to the product, showing floor-level GPS location, tapping through a station gate with the watch, adding a friend by touching watches, asking the AI assistant Xiaoxing for homework help, and sleep tracking. It ends on a white product card with the line “Let go, with peace of mind.”</p>
+
+  <h2 id="five-seconds-film"><span class="zh">成片</span><span class="en">Film</span></h2>
+  <div class="player"><video controls preload="none" poster="assets/img/cover1.jpg" data-fallback="assets/img/v1_1.jpg"><source src="assets/video/five-seconds.mp4" type="video/mp4"></video></div>
+
+  <h2 id="five-seconds-production"><span class="zh">制作</span><span class="en">Production</span></h2>
+  <h3><span class="zh">构思</span><span class="en">Concept</span></h3>
+  <p class="zh">刘飏在创作构思时认为，儿童安全类产品的广告容易以制造焦虑的方式呈现，因此将本片设定为孩子“被抓包”的小喜剧，以孩子的小心思和母亲的从容形成对比。片中的手表被定位为让家长能够放心让孩子独立行动的工具。</p>
+  <p class="en">When developing the concept, Liu felt that advertising for child-safety products tends to rely on fear, so the film was written as a small comedy about a child getting caught, contrasting the boy’s scheming with his mother’s calm. The watch is presented as something that lets parents feel safe letting their children go out alone.</p>
+  <h3><span class="zh">场景选择</span><span class="en">Setting</span></h3>
+  <p class="zh">开场场景曾考虑河边、水塘等家长最担心的地点，但这会使全片变为恐吓式广告。最终选定的电玩城既是小学生可能偷偷前往的地方，“商场三楼的某家店”也便于表现楼层级定位。母亲的台词经多轮删减，最终只保留“给你五秒”。</p>
+  <p class="en">A riverbank or a pond, the places parents fear most, were considered for the opening, but they would have turned the film into a scare. The arcade was chosen because children do sneak off to such places, and “a shop on the third floor of a mall” suits a demonstration of floor-level location. The mother’s lines were cut over several rounds until only “Five seconds” remained.</p>
+  <h3><span class="zh">视觉风格</span><span class="en">Visual style</span></h3>
+  <p class="zh">剧情段落采用接近实拍的影像风格：自然光与室内灯混合照明，手持摄影，中等偏浅景深，细颗粒，调色克制。提示词中明确要求呈现真实皮肤毛孔，避免磨皮和柔光雾化，以减少 AI 视频常见的油亮感。</p>
+  <p class="zh">产品段落改为高调棚拍风格，使用浅暖灰白无缝背景、大面积柔光与固定机位，画面留白较多，与昏暗的电玩城形成明显区分。早期曾尝试深蓝背景加顶光，因效果接近舞台灯光而弃用。全片以橙色作为唯一品牌强调色，用于 SOS 按键、界面图标、定位点和角色书包上的挂件。</p>
+  <p class="en">The story scenes aim for a live-action look: mixed daylight and practical lighting, handheld camera, moderately shallow depth of field, fine grain and a restrained grade. The prompts specifically asked for visible skin pores and no smoothing or soft-focus haze, to avoid the glossy look common in AI video.</p>
+  <p class="en">The product scenes switch to a high-key studio look, with a warm light-grey seamless background, broad soft light, a locked-off camera and generous negative space, setting them clearly apart from the dim arcade. A dark-blue background with top light was tried early on and abandoned because it resembled stage lighting. Orange is the only brand accent colour in the film, used for the SOS button, interface icons, the location marker and a charm on the boy’s schoolbag.</p>
+  <h3><span class="zh">分镜</span><span class="en">Storyboard</span></h3>
+  <table class="wikitable">
+    <tr><th>#</th><th><span class="zh">景别</span><span class="en">Shot size</span></th><th><span class="zh">机位</span><span class="en">Camera</span></th><th><span class="zh">内容</span><span class="en">Action</span></th></tr>
+    <tr><td>1</td><td><span class="zh">中景</span><span class="en">Medium</span></td><td><span class="zh">背后过肩，孩子头部高度，手持跟拍</span><span class="en">Over the shoulder from behind, at the children’s head height, handheld</span></td><td><span class="zh">三人快步前进，小宇回头张望后加快脚步</span><span class="en">The three hurry on; Xiaoyu looks back and walks faster</span></td></tr>
+    <tr><td>2</td><td><span class="zh">特写</span><span class="en">Close-up</span></td><td><span class="zh">游戏机方向盘位于前景，手持缓慢推近</span><span class="en">Arcade steering wheel in the foreground, slow handheld push-in</span></td><td><span class="zh">手表震动，屏幕显示“妈妈”来电</span><span class="en">The watch vibrates, showing an incoming call from “Mum”</span></td></tr>
+    <tr><td>3</td><td><span class="zh">近景转升格</span><span class="en">Close-up to slow motion</span></td><td><span class="zh">贴近地面的低机位，与手腕齐高</span><span class="en">Low, near the floor, at wrist height</span></td><td><span class="zh">小宇跑过镜头，手腕入画后转为慢动作，随后甩镜切至棚拍产品镜头</span><span class="en">Xiaoyu runs past; the wrist enters frame in slow motion, followed by a whip pan to the studio product shot</span></td></tr>
+    <tr><td>4</td><td><span class="zh">中景</span><span class="en">Medium</span></td><td><span class="zh">闸机一侧，人物左后方，略高于肩</span><span class="en">Beside the ticket gate, behind the boy’s left side, slightly above shoulder height</span></td><td><span class="zh">小宇以手表刷闸进站，界面提示弹出</span><span class="en">Xiaoyu taps the watch at the gate and an interface prompt appears</span></td></tr>
+  </table>
+  <h3><span class="zh">素材准备</span><span class="en">Assets</span></h3>
+  <p class="zh">正式生成视频前，先制作人物定妆照、三视图和手表四视图，并为手表的每个屏幕状态单独生成界面图。界面内容由参考图锁定，不由 AI 自行生成文字。提示词中对每张参考图只借用指定部分，并写明取舍，例如只取人物面部而不取影棚光，只取手表而不取背景。</p>
+  <p class="en">Before any video was generated, look tests, three-view character sheets and four-view sheets of the watch were made, along with a separate interface image for each screen state. The reference images fix the interface content so that the AI does not invent text. The prompts take only a specified part of each reference and state what to leave out: the face but not the studio lighting, the watch but not the background.</p>
+  <div class="gallery wide">
+    <figure><img src="assets/img/ref/watch.webp" alt="" loading="lazy"><figcaption><span class="zh">手表四视图：正面、侧面、背面、斜侧</span><span class="en">Watch sheet: front, side, back and three-quarter views</span></figcaption></figure>
+    <figure><img src="assets/img/ref/xiaoyu.webp" alt="" loading="lazy"><figcaption><span class="zh">小宇定妆照：正面、背面、面部</span><span class="en">Xiaoyu: front, back and face</span></figcaption></figure>
+    <figure><img src="assets/img/ref/pangdun.webp" alt="" loading="lazy"><figcaption><span class="zh">胖墩定妆照：正面、背面、面部</span><span class="en">Pangdun: front, back and face</span></figcaption></figure>
+    <figure><img src="assets/img/ref/duoduo.webp" alt="" loading="lazy"><figcaption><span class="zh">朵朵定妆照：正面、背面、面部</span><span class="en">Duoduo: front, back and face</span></figcaption></figure>
+    <figure><img src="assets/img/ref/mother_1.webp" alt="" loading="lazy"><figcaption><span class="zh">母亲定妆照（开衫）：正面、背面、面部</span><span class="en">The mother in a cardigan: front, back and face</span></figcaption></figure>
+    <figure><img src="assets/img/ref/mother_2.webp" alt="" loading="lazy"><figcaption><span class="zh">母亲定妆照（风衣）：正面、背面、面部</span><span class="en">The mother in a trench coat: front, back and face</span></figcaption></figure>
+  </div>
+  <h3><span class="zh">提示词写法</span><span class="en">Prompt writing</span></h3>
+  <p class="zh">每个镜头的提示词只表达一件事。尺寸以数字代替形容词：提示词不写“手表小一点”，而写“表壳不比手腕宽、不比拇指长、凸起不超过小指粗细”。提示词中还预先写明失败条件，例如“如果小宇说了妈妈的台词，这个镜头就是错的”。</p>
+  <p class="en">Each shot’s prompt expresses one thing only. Sizes are given as numbers rather than adjectives: not “make the watch smaller” but “the case no wider than the wrist, no longer than the thumb, no thicker than the little finger”. The prompts also state failure conditions in advance, such as “if Xiaoyu says his mother’s line, the shot is wrong”.</p>
+  <h3><span class="zh">生成过程</span><span class="en">Generation</span></h3>
+  <p class="zh">以母亲发现孩子位置的镜头为例，该镜头共生成 4 次，提示词修改 6 版。早期版本中人物皮肤呈塑料质感，并带有金色逆光和柔光雾化；最终版本改为真实办公室光线，并注明皮肤哑光、可见毛孔。推镜最初接近后期数码放大，缺乏空间感，最终版本改为描述摄影师手持向前移动，并要求前景中的显示器边缘、键盘比人物移动更快，以形成视差。镜头在母亲按下拨号键时结束，“给你五秒”一句留至下一镜头。</p>
+  <p class="en">The shot in which the mother finds her son’s location was generated four times, with six revisions of the prompt. Early versions gave the actor plastic-looking skin with golden backlight and a soft-focus haze; the final version used ordinary office light and specified matte skin with visible pores. The push-in initially looked like a digital zoom with no sense of space, so the final prompt described the camera operator walking forward and required the monitor edge and keyboard in the foreground to move faster than the actor, creating parallax. The shot ends as she presses the call button, leaving the line “Five seconds” for the next shot.</p>
+  <p><span class="zh">提示词节选：</span><span class="en">Prompt excerpt (translated from Chinese):</span></p>
+  <pre class="zh">【最重要的两条规则】
+1. 每个镜头都是摄影师手持摄影机在物理空间中缓慢向前走近。必须有真实的视差：离镜头近的物体比人物移动得更快，逐渐滑出画面边缘……如果画面只是整体等比例变大、没有视差，看起来像后期数码放大，这个镜头就是错的。
+2. 妈妈永远不看镜头。
+
+【动作】
+0.0–0.8 秒：她的右手握着鼠标，食指点击了两下，又滚动了一下滚轮。
+0.8 秒：手机亮屏，在桌面上嗡嗡震动。
+0.8–2.8 秒：她的眼睛瞟向手机，右手松开鼠标，顺势拿起手机，举到胸前低头看。
+……
+6.9–7.2 秒：拇指干脆地按下绿色拨号按钮。画面在这里结束。
+
+【面部】真实的成年人皮肤：可见毛孔，肤色有自然的细微不均……没有油光，没有磨皮，没有美颜。
+
+【禁止】数码放大或裁切式的推进；滑轨式完全平滑的移动；金色光晕、雾化、柔光滤镜；皮肤油光、塑料感……</pre>
+  <pre class="en">[The two rules that matter most]
+1. Every shot is an operator walking slowly forward through real space with a handheld camera. Real parallax is required: objects near the lens move faster than the person and slide out of frame… If the whole image simply scales up with no parallax, it looks like a digital zoom and the shot is wrong.
+2. Mum never looks at the lens.
+
+[Action]
+0.0–0.8 s: right hand on the mouse; two clicks, one scroll.
+0.8 s: the phone lights up and buzzes on the desk.
+0.8–2.8 s: her eyes go to the phone; she lets go of the mouse, picks the phone up and looks down at it at chest height.
+…
+6.9–7.2 s: her thumb presses the green call button. The shot ends here.
+
+[Face] Real adult skin: visible pores, slightly uneven tone… no shine, no smoothing, no beauty filter.
+
+[Forbidden] Digital zoom or crop-style push-ins; perfectly smooth slider moves; golden glow, haze, soft-focus filters; oily or plastic skin…</pre>
+
+  <h3><span class="zh">后期</span><span class="en">Post-production</span></h3>
+  <p class="zh">AI 视频负责人物表演与运动；片尾定版动画、文字和通知卡片由代码 agent 合成。音乐只描述情绪曲线和卡点时间，风格交由模型生成。</p>
+  <p class="en">AI video handles performance and movement; the end card, on-screen text and notification cards were composited by a coding agent. The music brief described only the emotional curve and cue times, leaving the style to the model.</p>
+
+  <h2 id="five-seconds-gallery"><span class="zh">图集</span><span class="en">Gallery</span></h2>
+  <div class="gallery">
+    <figure><img src="assets/img/v1_1.jpg" alt=""><figcaption><span class="zh">三人走向电玩城</span><span class="en">The three children heading into the arcade</span></figcaption></figure>
+    <figure><img src="assets/img/v1_2.jpg" alt=""><figcaption><span class="zh">手表显示母亲来电</span><span class="en">The watch shows a call from his mother</span></figcaption></figure>
+    <figure><img src="assets/img/v1_3.jpg" alt=""><figcaption><span class="zh">升格镜头，随后转入产品段落</span><span class="en">Slow-motion shot leading into the product section</span></figcaption></figure>
+    <figure><img src="assets/img/v1_4.jpg" alt=""><figcaption><span class="zh">刷手表进站</span><span class="en">Tapping through the station gate</span></figcaption></figure>
+    <figure><img src="assets/img/v1_5.jpg" alt=""><figcaption><span class="zh">使用 AI 助手答题</span><span class="en">Using the AI assistant for homework</span></figcaption></figure>
+    <figure><img src="assets/img/v1_6.jpg" alt=""><figcaption><span class="zh">睡眠监测</span><span class="en">Sleep tracking</span></figcaption></figure>
+  </div>
+  <h2><span class="zh">参见</span><span class="en">See also</span></h2>
+  <ul><li><a href="#naiwa"><span class="zh">如果真的有奶蛙</span><span class="en"><i>If Naiwa Were Real</i></span></a></li><li><a href="#vampire-pumpkin"><span class="zh">吸血鬼与南瓜</span><span class="en"><i>The Vampire and the Pumpkin</i></span></a></li></ul>
+</section>
+
+<!-- ================= FILM 2 ================= -->
+<section class="page" id="naiwa" data-title-zh="如果真的有奶蛙" data-title-en="If Naiwa Were Real" data-parent="works">
+  <h1><span class="zh">如果真的有奶蛙</span><span class="en"><i>If Naiwa Were Real</i></span></h1>
+  <div class="sitesub"><span class="zh">出自 刘飏的主页</span><span class="en">From Liu Yang’s homepage</span></div>
+  <aside class="infobox">
+    <div class="ib-title"><span class="zh">如果真的有奶蛙</span><span class="en"><i>If Naiwa Were Real</i></span></div>
+    <img src="assets/img/cover2.jpg" data-fallback="assets/img/v3_1.jpg" alt="" data-cap-zh="影片标题画面" data-cap-en="Title card">
+    <div class="ib-cap"><span class="zh">影片标题画面</span><span class="en">Title card</span></div>
+    <table>
+      <tr><th><span class="zh">类型</span><span class="en">Genre</span></th><td><span class="zh">娱乐短视频、伪纪录片</span><span class="en">Entertainment short, mockumentary</span></td></tr>
+      <tr><th><span class="zh">主角</span><span class="en">Character</span></th><td><span class="zh">奶蛙</span><span class="en">Naiwa (奶蛙)</span></td></tr>
+      <tr><th><span class="zh">画幅</span><span class="en">Aspect ratio</span></th><td>4:3</td></tr>
+      <tr><th><span class="zh">发布日期</span><span class="en">Released</span></th><td><span class="zh">10 月 17 日</span><span class="en">17 October</span></td></tr>
+      <tr><th><span class="zh">播放量</span><span class="en">Views</span></th><td><span class="zh">22.9 万次</span><span class="en">229,000</span></td></tr>
+      <tr><th><span class="zh">制作方式</span><span class="en">Production</span></th><td><span class="zh">AI 生成</span><span class="en">AI-generated</span></td></tr>
+    </table>
+  </aside>
+  <p class="zh"><b>《如果真的有奶蛙》</b>是一部以网络形象“奶蛙”为主角的 AI 娱乐短视频，采用伪纪录片形式和 4:3 画幅，于 10 月 17 日发布。影片设想奶蛙真实存在于现实世界，以家用摄像机偷拍的视角，呈现其作为上班族、拆弹专家、搬家工人、消防员、黑帮老大、保安和明星等不同身份的生活。影片发布后播放量达 22.9 万次。</p>
+  <p class="en"><b><i>If Naiwa Were Real</i></b> is an AI entertainment short starring the internet character Naiwa (奶蛙), made as a mockumentary in a 4:3 frame and released on 17 October. It imagines Naiwa as a real being and, through the eyes of a hidden home camcorder, shows her living different lives: office worker, bomb-disposal expert, removal worker, firefighter, mob boss, security guard and celebrity. The video has been viewed 229,000 times.</p>
+  <div data-toc></div>
+
+  <h2 id="naiwa-plot"><span class="zh">剧情</span><span class="en">Plot</span></h2>
+  <p class="zh">影片开场于一间办公室，奶蛙坐在工位前敲击键盘，周围同事没有察觉异样。旁白提问：“如果这个世界上真的有奶蛙呢？她现在会在做什么呢？”随后影片以三组对照依次展开：细心的拆弹专家与搬家工人，从火场救出橘猫的消防员与抚摸同一只猫的黑帮老大，追人的保安与被狗仔追拍的明星。七种身份的奶蛙最终同时出现在一部电梯中。结尾，奶蛙穿着睡衣在家中吃面，停下筷子直视镜头，旁白问：“所以……她会是谁？”</p>
+  <p class="en">The film opens in an office, where Naiwa is typing at a desk and none of her colleagues notice anything unusual. A voice-over asks, “What if Naiwa really existed? What would she be doing right now?” The film then moves through three pairs of contrasts: a careful bomb-disposal expert and a removal worker; a firefighter rescuing a ginger cat from a fire and a mob boss stroking the same cat; a security guard giving chase and a celebrity being chased by paparazzi. All seven versions of Naiwa then appear together in a lift. At the end, Naiwa sits at home in pyjamas eating noodles, stops, and looks straight into the camera as the voice-over asks, “So… who would she be?”</p>
+
+  <h2 id="naiwa-film"><span class="zh">成片</span><span class="en">Film</span></h2>
+  <div class="player r43"><video controls preload="none" poster="assets/img/cover2.jpg" data-fallback="assets/img/v3_1.jpg"><source src="assets/video/naiwa.mp4" type="video/mp4"></video></div>
+
+  <h2 id="naiwa-production"><span class="zh">制作</span><span class="en">Production</span></h2>
+  <h3><span class="zh">构思</span><span class="en">Concept</span></h3>
+  <p class="zh">奶蛙通常以动画形象出现。本片将其置于完全写实的环境中，设想它像普通人一样上班、加班、被忽视，并在不同场景中扮演不同角色。片中没有任何人对奶蛙的存在表现出惊讶，影片借此表达“每个普通人身上都可能存在多种人生”的主题。</p>
+  <p class="en">Naiwa normally appears as an animated character. The film places her in an entirely realistic setting, imagining her going to work, staying late and going unnoticed like anyone else, and taking on a different role in each scene. No one in the film reacts to her existence, which the film uses to suggest that any ordinary person might have many possible lives.</p>
+  <h3><span class="zh">视觉风格</span><span class="en">Visual style</span></h3>
+  <p class="zh">全片统一采用家用摄像机拍摄的伪纪录片风格，几乎每个镜头都设定为“被偷拍”：远处长焦偷拍、藏在包中拍摄、慌乱中甩镜、狗仔倒退追拍等。所有镜头均为手持、标准焦段，并保留自动对焦的迟疑。照明只使用场景中实际存在的光源，包括办公室灯管、停车场工作灯、火光与警灯、闪光灯、家中的落地灯和电视光。色调略偏暖、略褪色，反差较低，接近录像带转制的效果；奶蛙的黄色在各场景中始终是画面中唯一饱和的暖色。</p>
+  <p class="en">The whole film is styled as home-camcorder mockumentary, with almost every shot framed as if filmed in secret: long-lens spying from a distance, a camera hidden in a bag, panicked whip pans, a paparazzo walking backwards. All shots are handheld with a normal lens and keep the hesitation of autofocus. Lighting comes only from sources present in each scene, including office tubes, car-park work lights, fire and police lights, camera flashes, and a floor lamp and television at home. The colour is slightly warm and faded with low contrast, close to a tape transfer, and Naiwa’s yellow is always the only saturated warm colour in the frame.</p>
+  <h3><span class="zh">分镜</span><span class="en">Storyboard</span></h3>
+  <table class="wikitable">
+    <tr><th>#</th><th><span class="zh">镜头</span><span class="en">Shot</span></th><th><span class="zh">机位</span><span class="en">Camera</span></th><th><span class="zh">内容</span><span class="en">Action</span></th></tr>
+    <tr><td>1</td><td><span class="zh">办公室，全景推至近景</span><span class="en">Office, wide to close</span></td><td><span class="zh">约 12 米外，同事从两台显示器之间以长焦偷拍</span><span class="en">About 12 m away, a colleague filming between two monitors with a long lens</span></td><td><span class="zh">奶蛙敲击键盘，同事经过画面，奶蛙疲惫地靠进椅子</span><span class="en">Naiwa types; a colleague crosses frame; she slumps back in her chair</span></td></tr>
+    <tr><td>2</td><td><span class="zh">消防员，全景推至中近景</span><span class="en">Firefighter, wide to medium close</span></td><td><span class="zh">街对面约 15 米，围观者在警戒线后平视拍摄</span><span class="en">About 15 m across the street, an onlooker behind the cordon at eye level</span></td><td><span class="zh">浓烟中出现蛋形剪影，奶蛙抱着橘猫走出</span><span class="en">An egg-shaped silhouette appears in the smoke; Naiwa walks out carrying a ginger cat</span></td></tr>
+    <tr><td>3</td><td><span class="zh">电梯，全景</span><span class="en">Lift, wide</span></td><td><span class="zh">电梯门正前方约 6.5 米，胸口高度</span><span class="en">About 6.5 m in front of the doors, chest height</span></td><td><span class="zh">电梯门打开，七个身份的奶蛙分两排站立</span><span class="en">The doors open on seven versions of Naiwa standing in two rows</span></td></tr>
+    <tr><td>4</td><td><span class="zh">家中，中景</span><span class="en">Home, medium</span></td><td><span class="zh">客厅对面约 2.5 米，略低于视线</span><span class="en">About 2.5 m across the living room, just below eye level</span></td><td><span class="zh">奶蛙吃面看电视，停下筷子转向镜头</span><span class="en">Naiwa eats noodles in front of the TV, stops and turns to the camera</span></td></tr>
+  </table>
+  <h3><span class="zh">电梯镜头提示词</span><span class="en">Prompt for the lift shot</span></h3>
+  <pre class="zh">早晨，写字楼电梯厅。一个人拿着家用摄像机，安静地对着一部宽大的货客两用电梯拍。“叮”的一声，电梯门缓缓打开：宽敞的轿厢里站着七个一模一样的圆滚滚的黄色生物，各穿一套不同职业的衣服——交易员、拆弹专家、搬家工人、消防员、黑帮老大、夜班保安、明星。他们面无表情地站着，谁也不说话，谁也不出来。4 秒，手持，标准焦段，没有变焦，4:3。
+
+七张定妆图各绑定一个位置：前排从左到右是交易员、黑帮老大、明星；后排从左到右是搬家工人、消防员、拆弹专家、保安。七个是同一个生物，只有衣服不同，衣服之间绝不混合。每两个之间留 20 到 30 厘米空隙，身体和衣服互不接触、互不重叠。
+
+光线只来自真实光源：轿厢天花板 5000K 的白色灯板，电梯厅 3200K 的暖色筒灯，左侧玻璃门透进来 6500K 的清晨日光。家用摄像机质感，略偏暖、略微褪色，门打开时自动曝光先过曝再压下来。
+
+禁止：广角变形、变焦、第八个或少于七个、身体穿插或融合、衣服混合、任何人看镜头、任何文字。</pre>
+  <pre class="en">Morning, an office lift lobby. Someone with a home camcorder quietly films a wide service lift. Ding: the doors open on seven identical round yellow creatures, each in a different work outfit: trader, bomb-disposal expert, removal worker, firefighter, mob boss, night guard, celebrity. Blank faces; nobody speaks, nobody steps out. 4 s, handheld, normal lens, no zoom, 4:3.
+
+Each of the seven costume references is tied to one position. Front row, left to right: trader, mob boss, celebrity. Back row: removal worker, firefighter, bomb-disposal expert, guard. All seven are the same creature; only the clothes differ, and outfits never mix. 20–30 cm between each; bodies and clothes never touch or overlap.
+
+Light only from real sources: a 5000K ceiling panel in the lift, 3200K warm downlights in the lobby, 6500K morning daylight through the glass door on the left. Camcorder look, slightly warm and faded; when the doors open, the auto-exposure blows out and then settles.
+
+Forbidden: wide-angle distortion, zoom, an eighth figure or fewer than seven, merged bodies, mixed outfits, anyone looking at the lens, any text.</pre>
+
+  <h2 id="naiwa-reception"><span class="zh">反响</span><span class="en">Reception</span></h2>
+  <p class="zh">影片发布首日（10 月 17 日）单日播放约 5.8 万次。截至统计时，影片播放 22.9 万次，点赞 1.7 万次，分享 2.4 万次，分享量高于点赞量，分享率约 10%。完播率为 23.31%，5 秒完播率 53.14%，2 秒跳出率 30.55%，平均播放时长 14 秒，各项指标均高于所在账号此前发布的作品。</p>
+  <p class="en">The video drew about 58,000 views on its release day, 17 October. At the time of counting it had 229,000 views, 17,000 likes and 24,000 shares, with shares outnumbering likes for a share rate of about 10%. Its completion rate was 23.31%, its 5-second completion rate 53.14% and its 2-second drop-off rate 30.55%, with an average watch time of 14 seconds, all higher than the account’s previous videos.</p>
+  <table class="wikitable">
+    <tr><th><span class="zh">播放</span><span class="en">Views</span></th><th><span class="zh">点赞</span><span class="en">Likes</span></th><th><span class="zh">分享</span><span class="en">Shares</span></th><th><span class="zh">评论</span><span class="en">Comments</span></th><th><span class="zh">收藏</span><span class="en">Saves</span></th><th><span class="zh">涨粉</span><span class="en">New followers</span></th></tr>
+    <tr><td><span class="zh">22.9 万</span><span class="en">229,000</span></td><td><span class="zh">1.7 万</span><span class="en">17,000</span></td><td><span class="zh">2.4 万</span><span class="en">24,000</span></td><td>742</td><td>1,201</td><td>74</td></tr>
+  </table>
+
+  <h2 id="naiwa-gallery"><span class="zh">图集</span><span class="en">Gallery</span></h2>
+  <div class="gallery">
+    <figure><img src="assets/img/v3_1.jpg" alt=""><figcaption><span class="zh">办公室中的奶蛙</span><span class="en">Naiwa at the office</span></figcaption></figure>
+    <figure><img src="assets/img/v3_2.jpg" alt=""><figcaption><span class="zh">消防员从浓烟中抱猫走出</span><span class="en">The firefighter carrying a cat out of the smoke</span></figcaption></figure>
+    <figure><img src="assets/img/v3_3.jpg" alt=""><figcaption><span class="zh">七个身份的奶蛙同时出现在电梯中</span><span class="en">Seven versions of Naiwa in the lift</span></figcaption></figure>
+    <figure><img src="assets/img/v3_4.jpg" alt=""><figcaption><span class="zh">结尾，奶蛙在家中看向镜头</span><span class="en">The ending, with Naiwa at home looking into the camera</span></figcaption></figure>
+  </div>
+  <h2><span class="zh">参见</span><span class="en">See also</span></h2>
+  <ul><li><a href="#five-seconds"><span class="zh">小星电话手表广告</span><span class="en"><i>Xiaoxing Phone Watch Ad</i></span></a></li><li><a href="#vampire-pumpkin"><span class="zh">吸血鬼与南瓜</span><span class="en"><i>The Vampire and the Pumpkin</i></span></a></li></ul>
+</section>
+
+<!-- ================= FILM 3 ================= -->
+<section class="page" id="vampire-pumpkin" data-title-zh="吸血鬼与南瓜" data-title-en="The Vampire and the Pumpkin" data-parent="works">
+  <h1><span class="zh">吸血鬼与南瓜</span><span class="en"><i>The Vampire and the Pumpkin</i></span></h1>
+  <div class="sitesub"><span class="zh">出自 刘飏的主页</span><span class="en">From Liu Yang’s homepage</span></div>
+  <aside class="infobox">
+    <div class="ib-title"><span class="zh">吸血鬼与南瓜</span><span class="en"><i>The Vampire and the Pumpkin</i></span></div>
+    <img src="assets/img/cover3.jpg" data-fallback="assets/img/v2_1.jpg" alt="" data-cap-zh="影片片头标题画面" data-cap-en="Opening title card">
+    <div class="ib-cap"><span class="zh">影片片头标题画面</span><span class="en">Opening title card</span></div>
+    <table>
+      <tr><th><span class="zh">英文名</span><span class="en">Chinese title</span></th><td><span class="zh"><i>The Vampire and the Pumpkin</i></span><span class="en">《吸血鬼与南瓜》</span></td></tr>
+      <tr><th><span class="zh">类型</span><span class="en">Genre</span></th><td><span class="zh">情景喜剧</span><span class="en">Sitcom</span></td></tr>
+      <tr><th><span class="zh">片长</span><span class="en">Running time</span></th><td><span class="zh">约 1 分 10 秒</span><span class="en">About 1 minute 10 seconds</span></td></tr>
+      <tr><th><span class="zh">语言</span><span class="en">Language</span></th><td><span class="zh">英语</span><span class="en">English</span></td></tr>
+      <tr><th><span class="zh">角色</span><span class="en">Characters</span></th><td><span class="zh">内特、黑猫莫蒂默</span><span class="en">Nate; Mortimer, a black cat</span></td></tr>
+    </table>
+  </aside>
+  <p class="zh"><b>《吸血鬼与南瓜》</b>（英语：<i>The Vampire and the Pumpkin</i>）是一部 AI 生成的情景喜剧短片，片长约 1 分 10 秒，对白为英语。故事发生在万圣节夜晚，讲述男子内特给自己的黑猫莫蒂默穿上南瓜服后，自认为“暗夜生灵”的莫蒂默设法逼他为自己脱下服装的经过。</p>
+  <p class="en"><b><i>The Vampire and the Pumpkin</i></b> is an AI-generated sitcom short of about 1 minute 10 seconds, with dialogue in English. Set on Halloween night, it follows Nate, who dresses his black cat Mortimer in a pumpkin costume, and Mortimer, a self-styled creature of the night, as he tries to force Nate to take it off.</p>
+  <div data-toc></div>
+
+  <h2 id="vampire-pumpkin-plot"><span class="zh">剧情</span><span class="en">Plot</span></h2>
+  <p class="zh">万圣节傍晚，几名孩子提着南瓜桶走下纽约一栋砖楼的台阶。楼内，内特穿着吸血鬼服装走进客厅，让猫猜他扮的是什么。身穿南瓜服的莫蒂默抱怨自己是“暗夜生灵”，却被打扮成了“蔬菜”；内特解释南瓜其实是水果，莫蒂默回应这并不能安慰它。</p>
+  <p class="zh">莫蒂默宣称当晚没人敢来敲门，门铃随即响起。门外的孩子称赞它是“可爱的小猫”，内特以此为据，莫蒂默则回应“公众……只有三英尺高”。莫蒂默命令内特为它脱下服装，遭到拒绝后跳上茶几，一边盯着内特一边将糖果碗慢慢推向桌边，内特随即投降。影片最后硬切至莫蒂默身穿迷你吸血鬼装的近景，镜头拉远后，内特穿着同款服装坐在一旁吃爆米花，两人并排看电视。</p>
+  <p class="en">On Halloween evening, children carrying pumpkin buckets walk down the steps of a brick building in New York. Inside, Nate enters the living room in a vampire costume and asks the cat to guess what he is. Mortimer, dressed as a pumpkin, complains that he is a creature of the night and has been dressed as a vegetable; Nate explains that a pumpkin is technically a fruit, which Mortimer says is no comfort.</p>
+  <p class="en">Mortimer declares that no one will dare knock that night, and the doorbell immediately rings. The children outside call him a “cute kitty”, which Nate cites as the public’s opinion; Mortimer replies that “the public… is three feet tall.” Mortimer orders Nate to take the costume off. When Nate refuses, the cat jumps onto the coffee table and, holding his gaze, slowly pushes the candy bowl toward the edge until Nate gives in. The film then cuts to a close-up of Mortimer in a miniature vampire costume; the camera pulls back to reveal Nate in a matching outfit eating popcorn, the two watching television side by side.</p>
+
+  <h2 id="vampire-pumpkin-film"><span class="zh">成片</span><span class="en">Film</span></h2>
+  <div class="player"><video controls preload="none" poster="assets/img/cover3.jpg" data-fallback="assets/img/v2_1.jpg"><source src="assets/video/vampire-pumpkin.mp4" type="video/mp4"></video></div>
+
+  <h2 id="vampire-pumpkin-production"><span class="zh">制作</span><span class="en">Production</span></h2>
+  <h3><span class="zh">构思</span><span class="en">Concept</span></h3>
+  <p class="zh">影片的核心设定是一只自认为是凶兆的黑猫被迫穿成最可爱的南瓜。喜剧效果主要来自猫以低沉、优雅的嗓音说出委屈的台词，以及结尾的反转：莫蒂默并不反感被打扮，它反感的只是被打扮得“可爱”。</p>
+  <p class="en">The premise is a black cat who sees himself as a bad omen being forced into the cutest pumpkin costume. The comedy comes mainly from the cat delivering aggrieved lines in a deep, elegant voice, and from the final twist: Mortimer does not object to dressing up, only to being dressed as something cute.</p>
+  <h3><span class="zh">技术难点</span><span class="en">Technical challenges</span></h3>
+  <ul class="zh">
+    <li>猫需保持真实猫的身体结构，不得拟人化，且在近景、全景和拉远镜头之间体型保持一致。</li>
+    <li>罐头笑声的位置及静默段落的安排直接影响笑点效果。</li>
+    <li>猫的低音、内特的美式英语和画外儿童的声音需在全片保持一致。</li>
+    <li>门外的儿童只出声、不出镜，需由门板和内特的身体遮挡。</li>
+  </ul>
+  <ul class="en">
+    <li>The cat had to keep a real cat’s anatomy without becoming humanlike, and stay the same size across close-ups, wide shots and pull-backs.</li>
+    <li>The placement of the laugh track, and of silent passages, directly affected whether jokes landed.</li>
+    <li>The cat’s deep voice, Nate’s American English and the off-screen children’s voices had to remain consistent throughout.</li>
+    <li>The children at the door are heard but never seen, kept out of frame by the door and Nate’s body.</li>
+  </ul>
+  <h3><span class="zh">笑点设计</span><span class="en">Comic structure</span></h3>
+  <p class="zh">全片最大的笑点被安排在结尾的硬切而非台词上。内特说出“I’ll take it off”后，该段不使用任何笑声，使观众预期下一幕是猫脱下服装；下一镜头却是莫蒂默穿着与内特相同的迷你吸血鬼装。最后一个镜头从猫的近景拉远至内特，使笑点分两次出现。推糖果碗一段几乎没有台词，命令、拒绝、无声威胁、僵持和服软均通过动作和视线完成，也是全片唯一刻意不放笑声的段落。</p>
+  <p class="en">The biggest laugh is placed on the final hard cut rather than on a line. After Nate says “I’ll take it off,” the segment uses no laughter at all, leading the audience to expect the cat out of costume; the next shot instead shows Mortimer in a miniature vampire outfit matching Nate’s. The last shot pulls back from the cat to Nate, so the joke lands twice. The candy-bowl scene has almost no dialogue: the order, refusal, silent threat, standoff and surrender are carried by action and eyeline, and it is the only part of the film deliberately left without laughter.</p>
+  <p><span class="zh">提示词：</span><span class="en">Prompt (original, in Chinese):</span></p>
+  <pre>90年代多机位情景喜剧场景，连续镜头，16:9横屏。
+35mm胶片质感，温馨的纽约老公寓客厅，万圣节装饰。暖色钨丝灯光，各方向柔和补光，没有强烈阴影。舞台式平面调度，角色面向镜头，细腻胶片颗粒，情景喜剧布景的明亮感。
+夜晚：室内台灯和橙色南瓜串灯全部亮着，镜头外沙发对面的电视在人物脸上投下轻微闪烁的蓝白色微光。所有对白为英语。
+
+人物——
+内特： 【参考图 1】 二十八九岁的美国男生，金棕色微卷蓬松背头，侧分，蓝眼睛，浓眉，笑起来露出廉价的塑料吸血鬼獠牙。廉价吸血鬼服装：黑色缎面长斗篷配红色内衬，高高竖起的硬领；白色荷叶边褶皱衬衫；黑色宽腰封；黑色西裤，黑皮鞋。热情，反应慢半拍，表情夸张有喜剧感。说美式英语，声音明亮、热情、带点傻气。
+莫蒂默： 【参考图 7】 照片级真实的黑猫，短毛乌黑发亮，金黄色眼睛，穿着一套迷你吸血鬼装：小小的黑色缎面披风配红色内衬，竖起的小硬领，胸前一小片白色荷叶边领巾，和内特的服装是同款。真实猫的身体结构和比例，四条腿，蹲坐，不拟人，没有人类手臂和手。
+莫蒂默的声音： 【参考图 4】 低沉浑厚的低音炮男声，像古典恐怖片里优雅的怪物伯爵。发音考究，字字清晰，胸腔共鸣很重。语速缓慢，尾音拖长，带着压抑的怒火和贵族式的不屑。语调起伏自然、富有表现力，绝不平淡单调，绝不像机器或合成语音。内特的声音： 【参考图 3】 年轻的美国男声，说美式英语。声音明亮、热情、带点傻气，语速偏快。
+
+道具——糖果碗：黑底大碗，印满橘色南瓜灯图案，堆满彩色锡纸包装的万圣节糖果，放在茶几上，旁边是一个真南瓜和几本杂志。
+
+场景—— 【参考图 6】 【参考图 2】 红色布艺三人沙发，配蓝色靠垫和黑白条纹靠垫；沙发前是深色实木长茶几；红蓝花纹波斯地毯；沙发两侧各一盏黄铜底座、米白灯罩的台灯；塞满书和录像带的深色木书架；米白墙面，局部露出红砖；后方是挂着纱帘和黑色蝙蝠拉花的深色木质拱门，门楣上有橙色南瓜串灯，拱门里能看到白色厨房。
+
+0:00–0:8 —— 近景，然后缓慢变焦拉远，机位固定，正面对着沙发。
+画面一开始只有猫：它端坐在红色沙发左端，穿着迷你吸血鬼装，小硬领竖在脑后，平静地看着镜头外的电视，电视光在它脸上闪烁。表情平静、满足。
+镜头慢慢变焦拉远。猫的右侧逐渐露出内特，他穿着一模一样的吸血鬼服装，腿上抱着爆米花桶，正抓起一把爆米花塞进嘴里，一边嚼一边开心地盯着电视。镜头继续拉远，最后停在双人中景：整个沙发和茶几都在画面里，猫在左，内特在右，两人穿着同款吸血鬼装，并排看电视。内特又往嘴里放了一颗爆米花。完美和谐。镜头停住，谁都不说话。定格结尾。
+[罐头笑声：硬切到猫穿吸血鬼装的瞬间爆发大笑；拉远露出内特同款装扮时，转为温暖的笑声和掌声，最后接情景喜剧收尾音效]
+
+音频：90年代情景喜剧罐头笑声和掌声，结尾接情景喜剧收尾音效，除此之外没有背景音乐。室内底噪，电视里模糊的对白声。没有任何人说话。
+
+负面：任何对白，说话，开头画面里出现内特，镜头推近，机位移动，昏暗的电影调色，阴森的恐怖片打光，曝光不足，冷蓝色室内，手持镜头，画面晃动，浅景深虚化，鱼眼，广角畸变，卡通猫，3D渲染，皮克斯风，动漫，拟人化的猫，两条腿站立的猫，人类的手，手指，畸形肢体，多余的肢体，巨大的猫，和人一样大的猫，迷你猫，拉远过程中猫的体型变化，猫穿着南瓜服，南瓜帽，猫的吸血鬼装与内特的不同款，碗悬在桌边，糖果洒在地上，白天，阳光，文字，水印，logo，字幕。</pre>
+
+  <h2 id="vampire-pumpkin-gallery"><span class="zh">图集</span><span class="en">Gallery</span></h2>
+  <div class="gallery">
+    <figure><img src="assets/img/v2_1.jpg" alt=""><figcaption><span class="zh">片头外景</span><span class="en">Opening exterior</span></figcaption></figure>
+    <figure><img src="assets/img/v2_2.jpg" alt=""><figcaption><span class="zh">身穿南瓜服的莫蒂默与内特</span><span class="en">Mortimer in the pumpkin costume, with Nate</span></figcaption></figure>
+    <figure><img src="assets/img/v2_3.jpg" alt=""><figcaption><span class="zh">内特解释南瓜是水果</span><span class="en">Nate explaining that a pumpkin is a fruit</span></figcaption></figure>
+    <figure><img src="assets/img/v2_4.jpg" alt=""><figcaption><span class="zh">推糖果碗后，内特投降</span><span class="en">Nate surrendering after the candy-bowl threat</span></figcaption></figure>
+    <figure><img src="assets/img/v2_5.jpg" alt=""><figcaption><span class="zh">结尾，两人穿着同款吸血鬼装</span><span class="en">The ending, both in matching vampire costumes</span></figcaption></figure>
+  </div>
+  <h2><span class="zh">参见</span><span class="en">See also</span></h2>
+  <ul><li><a href="#five-seconds"><span class="zh">小星电话手表广告</span><span class="en"><i>Xiaoxing Phone Watch Ad</i></span></a></li><li><a href="#naiwa"><span class="zh">如果真的有奶蛙</span><span class="en"><i>If Naiwa Were Real</i></span></a></li></ul>
+</section>
+
+<!-- ================= WORKFLOW ================= -->
+<section class="page" id="workflow" data-title-zh="工作流" data-title-en="Workflow">
+  <h1><span class="zh">工作流</span><span class="en">Workflow</span></h1>
+  <div class="sitesub"><span class="zh">出自 刘飏的主页</span><span class="en">From Liu Yang’s homepage</span></div>
+  <aside class="infobox">
+    <div class="ib-title"><span class="zh">热点选题工具</span><span class="en">Trend-to-topic tool</span></div>
+    <table>
+      <tr><th><span class="zh">类型</span><span class="en">Type</span></th><td><span class="zh">自动化工作流</span><span class="en">Automated workflow</span></td></tr>
+      <tr><th><span class="zh">设计者</span><span class="en">Designer</span></th><td><span class="zh">刘飏</span><span class="en">Liu Yang</span></td></tr>
+      <tr><th><span class="zh">前身</span><span class="en">Predecessor</span></th><td><span class="zh">热点追踪 Skill（起重集文化传媒，2026）</span><span class="en">Trend-tracking skill (Qizhongji Culture Media, 2026)</span></td></tr>
+      <tr><th><span class="zh">数据来源</span><span class="en">Data sources</span></th><td><span class="zh">TikTok 创意中心（英国、美国）；Instagram Reels</span><span class="en">TikTok Creative Center (UK, US); Instagram Reels</span></td></tr>
+      <tr><th><span class="zh">数据抓取</span><span class="en">Scraping</span></th><td><span class="zh">Apify</span><span class="en">Apify</span></td></tr>
+      <tr><th><span class="zh">AI 分析</span><span class="en">AI analysis</span></th><td><span class="zh">Claude API</span><span class="en">Claude API</span></td></tr>
+      <tr><th><span class="zh">运行方式</span><span class="en">Runs on</span></th><td><span class="zh">Python 脚本，GitHub Actions 定时运行</span><span class="en">Python script, scheduled on GitHub Actions</span></td></tr>
+      <tr><th><span class="zh">推送</span><span class="en">Delivery</span></th><td><span class="zh">飞书群机器人</span><span class="en">Feishu group bot</span></td></tr>
+      <tr><th><span class="zh">频率</span><span class="en">Frequency</span></th><td><span class="zh">每天一次，伦敦时间 9:00</span><span class="en">Daily, 9:00 London time</span></td></tr>
+    </table>
+  </aside>
+  <p class="zh"><b>热点选题工具</b>是刘飏设计的一套自动化工作流，用于每天识别 TikTok 和 Instagram Reels 上处于上升期的音频与话题，由 AI 生成选题建议后推送至飞书。该方案是刘飏 2026 年在起重集文化传媒任职期间所用热点追踪方法的自动化升级。</p>
+  <p class="en">The <b>trend-to-topic tool</b> is an automated workflow designed by Liu Yang to identify rising audio and topics on TikTok and Instagram Reels each day, generate content ideas with AI and send them to Feishu. It automates the trend-tracking method Liu used at Qizhongji Culture Media in 2026.</p>
+  <div data-toc></div>
+
+  <h2 id="workflow-background"><span class="zh">背景</span><span class="en">Background</span></h2>
+  <p class="zh">刘飏 2026 年在起重集文化传媒负责海外社交媒体账号期间，使用以提示词为核心的热点追踪 Skill 辅助选题：由刘飏手动收集平台榜单和热门内容数据，交给 AI 分析走势并给出选题方向。借助这一方法发现的一段上升期音频，刘飏策划制作的一条 Reels 播放量达 221 万次（参见<a href="#about:about-career">关于 § 工作经历</a>）。</p>
+  <p class="zh">这一方法存在三方面的局限：数据收集依赖人工，每天需要逐个查看榜单；判断热点是否处于上升期时，缺少历史数据作为对照；分析结果分散在对话记录中，难以积累。热点选题工具即针对上述问题设计。</p>
+  <p class="en">While running overseas social media accounts at Qizhongji Culture Media in 2026, Liu used a prompt-based trend-tracking skill to plan content: Liu collected chart and trending-content data by hand and gave it to an AI to analyse trends and suggest topics. A Reel that Liu planned around a rising audio clip found this way reached 2.21 million views (see <a href="#about:about-career">About § Experience</a>).</p>
+  <p class="en">The method had three limits. Data collection was manual, with the charts checked one by one each day; there was no historical data against which to judge whether a trend was still rising; and the analysis was scattered across chat logs, so it did not build up over time. The trend-to-topic tool is designed to address these.</p>
+
+  <h2 id="workflow-pipeline"><span class="zh">流程</span><span class="en">Pipeline</span></h2>
+  <figure class="flow">
+    <div class="fl-row">
+      <div class="fl-node"><span class="zh">定时触发</span><span class="en">Scheduled trigger</span><small><span class="zh">每天伦敦时间 9:00 · GitHub Actions</span><span class="en">Daily at 9:00 London time · GitHub Actions</span></small></div>
+    </div>
+    <div class="fl-arrow">↓ <span><span class="zh">Apify 抓取</span><span class="en">Scraped via Apify</span></span></div>
+    <div class="fl-row two">
+      <div class="fl-node"><span class="zh">TikTok 创意中心</span><span class="en">TikTok Creative Center</span><small><span class="zh">英国、美国榜单：热门音频与话题</span><span class="en">UK and US charts: trending audio and topics</span></small></div>
+      <div class="fl-node"><span class="zh">Instagram Reels</span><span class="en">Instagram Reels</span><small><span class="zh">8 个话题标签下的热门 Reels</span><span class="en">Top Reels under eight hashtags</span></small></div>
+    </div>
+    <div class="fl-arrow">↓</div>
+    <div class="fl-row">
+      <div class="fl-node"><span class="zh">上升判断</span><span class="en">Rising check</span><small><span class="zh">TikTok 看排名变化；Reels 与历史快照对比</span><span class="en">TikTok rank changes; Reels compared with past snapshots</span></small></div>
+    </div>
+    <div class="fl-arrow">↓</div>
+    <div class="fl-row">
+      <div class="fl-node"><span class="zh">Claude 分析</span><span class="en">Claude analysis</span><small><span class="zh">走红原因 · 适合的内容 · 两条选题思路</span><span class="en">Why it is rising · suitable content · two topic ideas</span></small></div>
+    </div>
+    <div class="fl-arrow">↓</div>
+    <div class="fl-row two">
+      <div class="fl-node"><span class="zh">飞书日报卡片</span><span class="en">Feishu daily card</span><small><span class="zh">推送至飞书群</span><span class="en">Sent to a Feishu group</span></small></div>
+      <div class="fl-node"><span class="zh">数据存档</span><span class="en">Data archive</span><small><span class="zh">每日快照，次日用于上升判断</span><span class="en">Daily snapshot, used for the next day’s rising check</span></small></div>
+    </div>
+    <figcaption><span class="zh">热点选题工具流程</span><span class="en">Pipeline of the trend-to-topic tool</span></figcaption>
+  </figure>
+  <ol class="zh">
+    <li><b>定时触发</b>：GitHub Actions 每天伦敦时间 9:00 运行脚本。</li>
+    <li><b>数据抓取</b>：通过 Apify 获取 TikTok 创意中心英国、美国榜单的热门音频与话题各前 20 位，以及 #funny、#memes、#relatable、#comedy、#trending、#viralreels、#reelsinstagram、#explorepage 八个话题标签下的热门 Reels 及其使用的音频。</li>
+    <li><b>上升判断</b>：TikTok 部分依据榜单自带的排名变化和新上榜标记；Reels 没有公开榜单，通过与前几日的存档快照对比计算增长。</li>
+    <li><b>AI 分析</b>：将筛选出的上升热点交给 Claude，逐条说明走红原因和适合的内容类型，并给出两条选题思路。</li>
+    <li><b>推送与存档</b>：结果以卡片形式推送至飞书群；当日数据存入仓库，供次日对比，并逐步积累为选题库。</li>
+  </ol>
+  <ol class="en">
+    <li><b>Trigger</b>: GitHub Actions runs the script every day at 9:00 London time.</li>
+    <li><b>Scraping</b>: Apify collects the top 20 trending audio clips and topics from the TikTok Creative Center charts for the UK and the US, plus the top Reels and their audio under eight hashtags: #funny, #memes, #relatable, #comedy, #trending, #viralreels, #reelsinstagram and #explorepage.</li>
+    <li><b>Rising check</b>: for TikTok, the charts’ own rank changes and new-entry flags are used; Reels has no public chart, so growth is calculated against archived snapshots from previous days.</li>
+    <li><b>AI analysis</b>: the rising items are passed to Claude, which explains why each is rising and what kind of content it suits, and gives two topic ideas for each.</li>
+    <li><b>Delivery and archive</b>: the results are sent to a Feishu group as a card, and the day’s data is saved to the repository for the next day’s comparison, building up into a topic library.</li>
+  </ol>
+
+  <h2 id="workflow-design"><span class="zh">设计要点</span><span class="en">Design considerations</span></h2>
+  <ul class="zh">
+    <li><b>以“上升”而非“热门”为标准</b>：已登顶的热点竞争者多，处于上升期的热点留有更长的跟进时间。</li>
+    <li><b>跨平台交叉验证</b>：同一音频若同时出现在 TikTok 上升榜和多条热门 Reels 中，优先级相应提高。</li>
+    <li><b>数据与判断分离</b>：热点数据全部来自抓取结果，AI 只负责分析和撰写建议，不生成数据，以避免虚构热点。</li>
+    <li><b>容错</b>：单一数据源抓取失败时，其余部分照常推送，并在卡片中注明缺失的部分。</li>
+    <li><b>成本控制</b>：抓取量控制在 Apify 免费额度（每月 5 美元）以内，分析使用 Claude 的低成本模型。</li>
+  </ul>
+  <ul class="en">
+    <li><b>Rising, not popular</b>: trends that have already peaked are crowded, while rising ones leave more time to respond.</li>
+    <li><b>Cross-platform confirmation</b>: audio that appears both on the TikTok rising chart and in several top Reels is ranked higher.</li>
+    <li><b>Data kept apart from judgement</b>: all trend data comes from scraping; the AI only analyses it and writes suggestions, and never produces data, so it cannot invent trends.</li>
+    <li><b>Fault tolerance</b>: if one source fails, the rest is still delivered, and the card notes what is missing.</li>
+    <li><b>Cost control</b>: scraping is kept within Apify’s free allowance of US$5 a month, and the analysis uses a low-cost Claude model.</li>
+  </ul>
+
+  <h2 id="workflow-stack"><span class="zh">技术方案</span><span class="en">Technical setup</span></h2>
+  <table class="wikitable">
+    <tr><th><span class="zh">环节</span><span class="en">Stage</span></th><th><span class="zh">工具</span><span class="en">Tool</span></th><th><span class="zh">说明</span><span class="en">Notes</span></th></tr>
+    <tr><td><span class="zh">定时运行</span><span class="en">Scheduling</span></td><td>GitHub Actions</td><td><span class="zh">免费；高峰期可能延迟 5 至 30 分钟</span><span class="en">Free; may run 5–30 minutes late at busy times</span></td></tr>
+    <tr><td><span class="zh">数据抓取</span><span class="en">Scraping</span></td><td>Apify</td><td><span class="zh">使用第三方抓取工具；免费账号每月 5 美元额度</span><span class="en">Third-party scrapers; free accounts get US$5 of credit a month</span></td></tr>
+    <tr><td><span class="zh">上升判断</span><span class="en">Rising check</span></td><td>Python</td><td><span class="zh">排名变化与历史快照对比</span><span class="en">Rank changes and comparison with past snapshots</span></td></tr>
+    <tr><td><span class="zh">分析与选题</span><span class="en">Analysis and ideas</span></td><td>Claude API</td><td><span class="zh">低成本模型，每日费用在数美分以内</span><span class="en">Low-cost model, a few cents a day at most</span></td></tr>
+    <tr><td><span class="zh">推送</span><span class="en">Delivery</span></td><td><span class="zh">飞书群机器人</span><span class="en">Feishu group bot</span></td><td><span class="zh">通过 webhook 发送卡片消息</span><span class="en">Card messages sent via webhook</span></td></tr>
+    <tr><td><span class="zh">存档</span><span class="en">Archive</span></td><td><span class="zh">GitHub 仓库</span><span class="en">GitHub repository</span></td><td><span class="zh">每日 JSON 快照</span><span class="en">Daily JSON snapshots</span></td></tr>
+  </table>
+
+  <h2 id="workflow-output"><span class="zh">输出内容</span><span class="en">Output</span></h2>
+  <p class="zh">飞书日报卡片分为四部分：上升最快的音频前 5 位，列出名称、排名变化、使用量和链接；上升话题前 5 位；同时出现在多条热门 Reels 中的音频；以及针对每个热点的 AI 选题建议。</p>
+  <p class="en">The Feishu daily card has four parts: the five fastest-rising audio clips, with name, rank change, number of uses and link; the five fastest-rising topics; audio that appears in several top Reels; and AI topic ideas for each trend.</p>
+
+
+  <h2><span class="zh">参见</span><span class="en">See also</span></h2>
+  <ul><li><a href="#about:about-career"><span class="zh">关于 § 工作经历</span><span class="en">About § Experience</span></a></li><li><a href="#works"><span class="zh">作品</span><span class="en">Work</span></a></li></ul>
+</section>
+
+<!-- ================= VISUALS ================= -->
+<section class="page" id="visuals" data-title-zh="视觉" data-title-en="Visuals">
+  <h1><span class="zh">视觉</span><span class="en">Visuals</span></h1>
+  <div class="sitesub"><span class="zh">出自 刘飏的主页</span><span class="en">From Liu Yang’s homepage</span></div>
+  <p class="zh">本条目收录刘飏使用 AI 图像生成工具制作的静态图像，共 16 幅，按内容分为影视剧照、场景和人像三类。人像部分又分为人脸、写真与服饰。点击图片可查看大图。</p>
+  <p class="en">This article collects 16 still images made by Liu Yang with AI image-generation tools. They are grouped by content into film stills, scenes and portraits; the portraits are further divided into faces, editorial portraits and wardrobe. Click any image to enlarge it.</p>
+
+  <h2 id="visuals-stills"><span class="zh">影视剧照</span><span class="en">Film stills</span></h2>
+  <p class="zh">模拟电影画面的单帧图像，画幅为 16:9，包括人物情绪近景和一组动作镜头。</p>
+  <p class="en">Single frames composed as cinema shots in 16:9, including emotional close-ups and an action sequence.</p>
+  <div class="gallery wide">
+    <figure><img src="assets/img/visual/still_1.webp" alt="" loading="lazy"><figcaption><span class="zh">婚宴上的父母</span><span class="en">Parents at a wedding banquet</span></figcaption></figure>
+    <figure><img src="assets/img/visual/still_2.webp" alt="" loading="lazy"><figcaption><span class="zh">夜间斜拉桥上的赛车</span><span class="en">A race car on a cable-stayed bridge at night</span></figcaption></figure>
+    <figure><img src="assets/img/visual/still_4.webp" alt="" loading="lazy"><figcaption><span class="zh">校园里流泪的女生，近景</span><span class="en">A schoolgirl in tears, close-up</span></figcaption></figure>
+    <figure><img src="assets/img/visual/still_5.webp" alt="" loading="lazy"><figcaption><span class="zh">宠物医院里，主人看着自己的宠物，满眼心疼</span><span class="en">At a vet clinic, an owner looks at her pet with heartache</span></figcaption></figure>
+  </div>
+
+  <h2 id="visuals-scenes"><span class="zh">场景</span><span class="en">Scenes</span></h2>
+  <p class="zh">不含人物的环境图，涵盖室内与室外、日景与夜景。</p>
+  <p class="en">Environment images without people, covering interiors and exteriors, day and night.</p>
+  <div class="gallery wide">
+    <figure><img src="assets/img/visual/scene_1.webp" alt="" loading="lazy"><figcaption><span class="zh">万圣节装饰的客厅</span><span class="en">A living room decorated for Halloween</span></figcaption></figure>
+    <figure><img src="assets/img/visual/scene_2.webp" alt="" loading="lazy"><figcaption><span class="zh">泥地与断木，阴天</span><span class="en">Mud and broken tree stumps, overcast</span></figcaption></figure>
+    <figure><img src="assets/img/visual/scene_3.webp" alt="" loading="lazy"><figcaption><span class="zh">草坡上的农舍与木栅栏</span><span class="en">A farmhouse and wooden fence on a grassy slope</span></figcaption></figure>
+    <figure><img src="assets/img/visual/scene_4.webp" alt="" loading="lazy"><figcaption><span class="zh">日落时的渡船甲板</span><span class="en">A ferry deck at sunset</span></figcaption></figure>
+    <figure><img src="assets/img/visual/scene_5.webp" alt="" loading="lazy"><figcaption><span class="zh">天台夜景，远处为城市天际线</span><span class="en">A rooftop at night with a city skyline</span></figcaption></figure>
+    <figure><img src="assets/img/visual/scene_6.webp" alt="" loading="lazy"><figcaption><span class="zh">日光下的老式厨房</span><span class="en">An old kitchen in daylight</span></figcaption></figure>
+  </div>
+
+  <h2 id="visuals-portraits"><span class="zh">人像</span><span class="en">Portraits</span></h2>
+  <h3><span class="zh">人脸</span><span class="en">Faces</span></h3>
+  <p class="zh">三幅采用相同设定：黑色背心、浅色背景、半身构图。</p>
+  <p class="en">Three images with the same setup—black tank top, light background, half-length framing.</p>
+  <div class="gallery">
+    <figure><img src="assets/img/visual/face_1.webp" alt="" loading="lazy"><figcaption><span class="zh">长直发，正面柔光</span><span class="en">Long straight hair, soft frontal light</span></figcaption></figure>
+    <figure><img src="assets/img/visual/face_2.webp" alt="" loading="lazy"><figcaption><span class="zh">卷发，侧逆光</span><span class="en">Wavy hair, side backlight</span></figcaption></figure>
+    <figure><img src="assets/img/visual/face_3.webp" alt="" loading="lazy"><figcaption><span class="zh">长卷发，侧光</span><span class="en">Long wavy hair, side light</span></figcaption></figure>
+  </div>
+  <h3><span class="zh">写真</span><span class="en">Editorial portrait</span></h3>
+  <div class="gallery">
+    <figure><img src="assets/img/visual/portrait_1.webp" alt="" loading="lazy"><figcaption><span class="zh">男性人像，黑色 T 恤，硬光</span><span class="en">Male portrait, black T-shirt, hard light</span></figcaption></figure>
+  </div>
+  <h3><span class="zh">服饰</span><span class="en">Wardrobe</span></h3>
+  <div class="gallery">
+    <figure><img src="assets/img/visual/outfit_1.webp" alt="" loading="lazy"><figcaption><span class="zh">深色牛仔外套</span><span class="en">Dark-wash denim jacket</span></figcaption></figure>
+    <figure><img src="assets/img/visual/outfit_2.webp" alt="" loading="lazy"><figcaption><span class="zh">浅色牛仔外套</span><span class="en">Light-wash denim jacket</span></figcaption></figure>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="page" id="contact" data-title-zh="联系" data-title-en="Contact">
+  <h1><span class="zh">联系</span><span class="en">Contact</span></h1>
+  <div class="sitesub"><span class="zh">出自 刘飏的主页</span><span class="en">From Liu Yang’s homepage</span></div>
+  <p class="zh">合作或工作机会可通过以下方式联系刘飏。</p>
+  <p class="en">Liu Yang can be contacted about work or collaboration as follows.</p>
+  <table class="wikitable">
+    <tr><th><span class="zh">邮箱</span><span class="en">Email</span></th><td><a href="mailto:liuyang20mc@163.com">liuyang20mc@163.com</a></td></tr>
+  </table>
+</section>
+
+</main>
+
+<div id="footer">
+  <span class="zh">本页面最后修订于 2026 年 11 月 9 日。</span><span class="en">This page was last edited on 9 November 2026.</span>
+</div>
+
+<div id="lightbox" role="dialog" aria-modal="true"><img alt=""><div></div></div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var pages = Array.prototype.slice.call(document.querySelectorAll('.page'));
+  var lastArticle = 'about';          // where "页面 / 阅读" go back to from the talk page
+
+  function getLang() { return root.getAttribute('data-lang'); }
+  function setLang(lang, save) {
+    root.setAttribute('data-lang', lang);
+    root.setAttribute('lang', lang === 'zh' ? 'zh-CN' : 'en');
+    document.querySelectorAll('[data-setlang]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.setlang === lang)); });
+    if (save) { try { localStorage.setItem('ly-lang', lang); } catch (e) {} }
+    var url = new URL(location.href);
+    url.searchParams.set('lang', lang);
+    history.replaceState(null, '', url.pathname + url.search + location.hash);
+    updateTitle();
+  }
+  function current() { return pages.filter(function (p) { return p.classList.contains('active'); })[0]; }
+  function updateTitle() {
+    var p = current(); if (!p) return;
+    var name = getLang() === 'zh' ? '刘飏' : 'Liu Yang';
+    var t = p.dataset['title' + (getLang() === 'zh' ? 'Zh' : 'En')];
+    document.title = t === name ? name : t + ' - ' + name;
+  }
+
+  // Wikipedia-style contents box from each page's h2s
+  document.querySelectorAll('[data-toc]').forEach(function (holder) {
+    var page = holder.closest('.page');
+    ['zh', 'en'].forEach(function (lang) {
+      var box = document.createElement('div');
+      box.className = 'toc ' + lang;
+      box.innerHTML = '<div class="toc-title">' + (lang === 'zh' ? '目录' : 'Contents') + '</div>';
+      var ol = document.createElement('ol'), n = 0;
+      page.querySelectorAll('h2[id]').forEach(function (h) {
+        n++;
+        var label = (h.querySelector('.' + lang) || h).textContent;
+        var li = document.createElement('li');
+        li.innerHTML = '<a href="#' + page.id + ':' + h.id + '"><span class="n">' + n + '</span>' + label + '</a>';
+        ol.appendChild(li);
+      });
+      box.appendChild(ol);
+      holder.appendChild(box);
+    });
+  });
+
+  function setTabs(id) {
+    var onTalk = id === 'contact';
+    var back = '#' + lastArticle;
+    var page = document.getElementById('tab-page'), read = document.getElementById('tab-read'), talk = document.getElementById('tab-talk');
+    page.setAttribute('href', back);
+    read.setAttribute('href', back);
+    page.classList.toggle('sel', !onTalk);
+    read.classList.toggle('sel', !onTalk);
+    talk.classList.toggle('sel', onTalk);
+  }
+
+  function route() {
+    var hash = decodeURIComponent(location.hash.slice(1)) || 'about';
+    var parts = hash.split(':');
+    var id = parts[0], anchor = parts[1];
+    var page = document.getElementById(id);
+    if (!page || !page.classList.contains('page')) {
+      var el = document.getElementById(id);
+      if (el && el.closest('.page')) { page = el.closest('.page'); anchor = id; id = page.id; }
+      else { page = document.getElementById('about'); id = 'about'; }
+    }
+    if (id !== 'contact') lastArticle = id;
+    pages.forEach(function (p) { p.classList.toggle('active', p === page); });
+    var navKey = page.dataset.parent || id;
+    document.querySelectorAll('#nav a').forEach(function (a) { a.classList.toggle('current', a.dataset.nav === navKey); });
+    setTabs(id);
+    updateTitle();
+    if (anchor && document.getElementById(anchor)) document.getElementById(anchor).scrollIntoView();
+    else window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', route);
+
+  // clicking a tab that points at the page already open just scrolls back to the top
+  document.querySelectorAll('.tabs a').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      if (a.getAttribute('href') === location.hash || (a.getAttribute('href') === '#about' && !location.hash)) { e.preventDefault(); window.scrollTo(0, 0); }
+    });
+  });
+
+  var start = new URL(location.href).searchParams.get('lang');
+  if (start !== 'zh' && start !== 'en') { try { start = localStorage.getItem('ly-lang'); } catch (e) { start = null; } }
+  setLang(start === 'en' ? 'en' : 'zh', false);
+  document.querySelectorAll('[data-setlang]').forEach(function (b) { b.addEventListener('click', function () { setLang(b.dataset.setlang, true); }); });
+  document.getElementById('langbtn').addEventListener('click', function () { setLang(getLang() === 'zh' ? 'en' : 'zh', true); });
+  // every visit starts on 关于, even if the address still carries an old #page
+  if (location.hash && location.hash !== '#about') history.replaceState(null, '', location.pathname + location.search);
+  route();
+
+  document.querySelectorAll('img[data-fallback]').forEach(function (img) {
+    img.addEventListener('error', function () { if (img.src.indexOf(img.dataset.fallback) === -1) img.src = img.dataset.fallback; });
+    if (img.complete && img.naturalWidth === 0) img.src = img.dataset.fallback;
+  });
+  document.querySelectorAll('video[data-fallback]').forEach(function (v) {
+    var probe = new Image();
+    probe.onerror = function () { v.poster = v.dataset.fallback; };
+    probe.src = v.getAttribute('poster');
+  });
+  var lb = document.getElementById('lightbox');
+  document.addEventListener('click', function (e) {
+    var img = e.target.closest('.gallery img, .infobox img');
+    if (!img) return;
+    var fig = img.closest('figure'), cap = '';
+    if (fig) { var c = fig.querySelector('figcaption .' + getLang()); cap = c ? c.textContent : ''; }
+    else cap = img.dataset['cap' + (getLang() === 'zh' ? 'Zh' : 'En')] || '';
+    lb.querySelector('img').src = img.src;
+    lb.querySelector('div').textContent = cap;
+    lb.classList.add('open');
+  });
+  lb.addEventListener('click', function () { lb.classList.remove('open'); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') lb.classList.remove('open'); });
+})();
+</script>
+</body>
+</html>
